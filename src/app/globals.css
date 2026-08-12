@@ -1,26 +1,285 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ===== Key Institutional palette (Branding Guide) ===== */
+  --color-key-primary: #026dfd;
+  --color-key-primary-dark: #0253c0;
+  --color-key-primary-soft: #e8f1ff;
+  --color-key-ink: #111418;
+  --color-key-black: #000000;
+  --color-key-white: #ffffff;
+  --color-key-lime: #c6f135;
+  --color-key-orange: #ff5a1f;
+  --color-key-lime-dark: #5e9400;
+  --color-key-teal: #0d9488;
+  --color-key-indigo: #4f46e5;
+  --color-key-muted: #5a6472;
+  --color-key-border: #e4e7eb;
+  --color-key-surface: #ffffff;
+  --color-key-surface-alt: #f4f6f9;
+
+  /* Section accents */
+  --color-sec-noticias: #026dfd;
+  --color-sec-opinion: #ff5a1f;
+  --color-sec-entrevistas: #4f46e5;
+  --color-sec-ciencia: #0d9488;
+  --color-sec-valores: #5e9400;
+
+  /* Fonts */
+  --font-sans: var(--font-albert), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
+
+  /* Spacing / radius / shadow */
+  --radius-card: 0.875rem;
+  --shadow-card: 0 1px 2px rgb(17 20 24 / 0.06), 0 8px 24px -12px rgb(17 20 24 / 0.16);
+  --shadow-card-hover: 0 2px 4px rgb(17 20 24 / 0.08), 0 20px 40px -16px rgb(2 109 253 / 0.22);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-key-white);
+  --color-foreground: var(--color-key-ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+* {
+  border-color: var(--color-key-border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-key-white);
+  color: var(--color-key-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-key-primary);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Editorial helpers ===== */
+
+@utility container-key {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility display {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+@utility kicker {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@utility hand {
+  font-family: var(--font-hand);
+  font-weight: 400;
+}
+
+/* Dotted engineering grid */
+@utility bg-dotgrid {
+  background-image: radial-gradient(var(--color-key-primary) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@utility bg-dotgrid-ink {
+  background-image: radial-gradient(rgb(255 255 255 / 0.35) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@utility bg-coord {
+  background-image:
+    linear-gradient(to right, var(--color-key-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-key-border) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Highlight marker */
+@utility marker-lime {
+  background-image: linear-gradient(104deg, transparent 0.9%, var(--color-key-lime) 0.9%, var(--color-key-lime) 95%, transparent 95%);
+  padding: 0 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+@utility marker-orange {
+  background-image: linear-gradient(104deg, transparent 0.9%, var(--color-key-orange) 0.9%, var(--color-key-orange) 95%, transparent 95%);
+  padding: 0 0.12em;
+  color: #fff;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* KEY stamp */
+@utility stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  border-radius: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.6rem;
+  transform: rotate(-4deg);
+  line-height: 1;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* ===== Article prose ===== */
+@utility prose-key {
+  & > p {
+    @apply my-5 text-[1.05rem] leading-8 text-key-ink;
+  }
+  & > h2 {
+    @apply mt-10 mb-3 font-extrabold text-2xl tracking-tight sm:text-3xl;
+  }
+  & > h3 {
+    @apply mt-8 mb-2 text-xl font-bold tracking-tight;
+  }
+  & a {
+    @apply font-semibold text-key-primary underline decoration-key-primary/40 underline-offset-2 hover:decoration-key-primary;
+  }
+  & ul {
+    @apply my-5 ml-5 list-disc space-y-2;
+  }
+  & ol {
+    @apply my-5 ml-5 list-decimal space-y-2;
+  }
+  & blockquote {
+    @apply my-8 border-l-4 border-key-primary pl-5 text-lg italic text-key-muted;
+  }
+  & hr {
+    @apply my-10 border-key-border;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@utility animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes ticker-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-ticker-in {
+  animation: ticker-in 0.5s ease both;
+}
+
+.tiptap-editor .ProseMirror {
+  @apply min-h-[420px] px-5 py-4 text-key-ink outline-none;
+}
+
+.tiptap-editor .ProseMirror p {
+  @apply my-2 leading-relaxed;
+}
+
+.tiptap-editor .ProseMirror > * + * {
+  @apply mt-3;
+}
+
+.tiptap-editor .ProseMirror h1 {
+  @apply text-3xl font-extrabold tracking-tight;
+}
+
+.tiptap-editor .ProseMirror h2 {
+  @apply text-2xl font-extrabold tracking-tight;
+}
+
+.tiptap-editor .ProseMirror h3 {
+  @apply text-xl font-bold;
+}
+
+.tiptap-editor .ProseMirror h4 {
+  @apply text-lg font-bold;
+}
+
+.tiptap-editor .ProseMirror ul {
+  @apply ml-5 list-disc space-y-1;
+}
+
+.tiptap-editor .ProseMirror ol {
+  @apply ml-5 list-decimal space-y-1;
+}
+
+.tiptap-editor .ProseMirror blockquote {
+  @apply my-4 border-l-4 border-key-primary pl-4 italic;
+}
+
+.tiptap-editor .ProseMirror blockquote[data-pullquote] {
+  @apply my-8 border-0 border-l-8 border-key-lime bg-key-surface-alt px-5 py-4 text-xl font-bold not-italic;
+}
+
+.tiptap-editor .ProseMirror blockquote[data-pullquote] footer {
+  @apply mt-2 text-sm font-semibold text-key-muted;
+}
+
+.tiptap-editor .ProseMirror pre {
+  @apply my-4 overflow-x-auto rounded-lg bg-key-ink p-4 text-sm text-key-white;
+}
+
+.tiptap-editor .ProseMirror pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+
+.tiptap-editor .ProseMirror code {
+  @apply rounded bg-key-surface-alt px-1.5 py-0.5 font-mono text-[0.85em];
+}
+
+.tiptap-editor .ProseMirror img {
+  @apply my-4 h-auto w-full rounded-card;
+}
+
+.tiptap-editor .ProseMirror a {
+  @apply font-semibold text-key-primary underline underline-offset-2;
+}
+
+.tiptap-editor .ProseMirror hr {
+  @apply my-6 border-key-border;
+}
+
+.tiptap-editor .ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-key-muted;
 }

@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  viewer
+  author
+  editor
+  admin
+  superadmin
+}
+
+enum ArticleStatus {
+  draft
+  scheduled
+  published
+  archived
+}
+
+enum ContributorRole {
+  author
+  collaborator
+  photographer
+  editor
+}
+
+enum ArticleMediaKind {
+  inline
+  gallery
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         UserRole  @default(viewer)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Author {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  bio         String?
+  photo       Media?   @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  photoId     String?
+  role        String?
+  program     String?
+  cohort      String?
+  socialLinks Json?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  articles ArticleAuthor[]
+}
+
+model Section {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  color       String   @default("#026DFD")
+  image       Media?   @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  imageId     String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  articles Article[]
+}
+
+model Article {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  subtitle      String?
+  excerpt       String?
+  content       Json?
+  section       Section?      @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  sectionId     String?
+  heroMedia     Media?        @relation("HeroArticleMedia", fields: [heroMediaId], references: [id], onDelete: SetNull)
+  heroMediaId   String?
+  imageCaption  String?
+  status        ArticleStatus @default(draft)
+  featured      Boolean       @default(false)
+  featuredAt    DateTime?
+  publishedAt   DateTime?
+  scheduledAt   DateTime?
+  seoTitle      String?
+  seoDescription String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  authors     ArticleAuthor[]
+  media       ArticleMedia[]
+  tags        Tag[]
+
+  @@index([status, publishedAt])
+  @@index([sectionId, status, publishedAt])
+  @@index([featured, status, featuredAt])
+  @@index([scheduledAt, status])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  mimeType  String
+  size      Int?
+  width     Int?
+  height    Int?
+  variants  Json?
+  altText   String?
+  caption   String?
+  credit    String?
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authors  Author[]
+  sections Section[]
+  heroArticles Article[]   @relation("HeroArticleMedia")
+  articleMedia ArticleMedia[]
+
+  @@index([mimeType])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  articles  Article[]
+}
+
+model ArticleAuthor {
+  id        String          @id @default(cuid())
+  article   Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
+  author    Author          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  role      ContributorRole @default(author)
+  sortOrder Int             @default(0)
+
+  @@unique([articleId, authorId])
+  @@index([authorId])
+}
+
+model ArticleMedia {
+  id        String            @id @default(cuid())
+  article   Article           @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
+  media     Media             @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId   String
+  kind      ArticleMediaKind  @default(inline)
+  caption   String?
+  sortOrder Int               @default(0)
+
+  @@unique([articleId, mediaId, kind])
+  @@index([mediaId])
+}
+
+model Setting {
+  key   String @id
+  value Json
+}
