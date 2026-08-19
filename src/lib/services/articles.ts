@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import type { Article, Prisma } from "@/generated/prisma/client";
-import { ArticleStatus } from "@/generated/prisma/client";
+import { Prisma, ArticleStatus } from "@/generated/prisma/client";
+import type { Article } from "@/generated/prisma/client";
 
 export const articleInclude = {
   section: true,
@@ -178,30 +178,82 @@ export async function searchArticles(query: string, opts: { page?: number; perPa
     ...(filters.tag ? { tags: { some: { slug: filters.tag } } } : {}),
   };
 
-  const where: Prisma.ArticleWhereInput = q
-    ? {
-        ...baseWhere,
-        OR: [
-          { title: { contains: q, mode: "insensitive" } },
-          { subtitle: { contains: q, mode: "insensitive" } },
-          { excerpt: { contains: q, mode: "insensitive" } },
-          { tags: { some: { name: { contains: q, mode: "insensitive" } } } },
-          { authors: { some: { author: { name: { contains: q, mode: "insensitive" } } } } },
-        ],
-      }
-    : baseWhere;
+  if (!q) {
+    const [items, total] = await Promise.all([
+      db.article.findMany({
+        where: baseWhere,
+        include: articleInclude,
+        orderBy: { publishedAt: "desc" },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+      db.article.count({ where: baseWhere }),
+    ]);
+    return { items, total, ...paginationMeta(total, page, perPage) };
+  }
 
-  const [items, total] = await Promise.all([
-    db.article.findMany({
-      where,
-      include: articleInclude,
-      orderBy: { publishedAt: "desc" },
-      skip: (page - 1) * perPage,
-      take: perPage,
-    }),
-    db.article.count({ where }),
-  ]);
-  return { items, total, ...paginationMeta(total, page, perPage) };
+  // Accent-insensitive matching via the unaccent extension. Pattern is
+  // escaped so % and _ in the query behave literally, like Prisma's contains.
+  const escaped = q.replace(/[\\%_]/g, (c) => "\\" + c);
+  const pattern = `%${escaped}%`;
+
+  const matchFragments: Prisma.Sql[] = [
+    Prisma.sql`unaccent("Article"."title") ILIKE unaccent(${pattern})`,
+    Prisma.sql`unaccent(coalesce("Article"."subtitle", '')) ILIKE unaccent(${pattern})`,
+    Prisma.sql`unaccent(coalesce("Article"."excerpt", '')) ILIKE unaccent(${pattern})`,
+    Prisma.sql`EXISTS (SELECT 1 FROM "_ArticleToTag" _t JOIN "Tag" _tag ON _tag."id" = _t."B" WHERE _t."A" = "Article"."id" AND unaccent(_tag."name") ILIKE unaccent(${pattern}))`,
+    Prisma.sql`EXISTS (SELECT 1 FROM "ArticleAuthor" _aa JOIN "Author" _au ON _au."id" = _aa."authorId" WHERE _aa."articleId" = "Article"."id" AND unaccent(_au."name") ILIKE unaccent(${pattern}))`,
+  ];
+
+  const filterFragments: Prisma.Sql[] = [];
+  if (filters.section)
+    filterFragments.push(
+      Prisma.sql`EXISTS (SELECT 1 FROM "Section" _s WHERE _s."id" = "Article"."sectionId" AND _s."slug" = ${filters.section})`
+    );
+  if (filters.author)
+    filterFragments.push(
+      Prisma.sql`EXISTS (SELECT 1 FROM "ArticleAuthor" _aa JOIN "Author" _au ON _au."id" = _aa."authorId" WHERE _aa."articleId" = "Article"."id" AND _au."slug" = ${filters.author})`
+    );
+  if (filters.tag)
+    filterFragments.push(
+      Prisma.sql`EXISTS (SELECT 1 FROM "_ArticleToTag" _t JOIN "Tag" _tag ON _tag."id" = _t."B" WHERE _t."A" = "Article"."id" AND _tag."slug" = ${filters.tag})`
+    );
+
+  const where = Prisma.sql`
+    "status" = 'published' AND "publishedAt" <= now()
+    ${filterFragments.length ? Prisma.sql`AND ${Prisma.join(filterFragments, " AND ")}` : Prisma.empty}
+    AND (${Prisma.join(matchFragments, " OR ")})
+  `;
+
+  const rows = await db.$queryRaw<{ id: string }[]>`
+    SELECT "Article"."id"
+    FROM "Article"
+    WHERE ${where}
+    ORDER BY "Article"."publishedAt" DESC
+    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}
+  `;
+
+  const [countRows] = await db.$queryRaw<{ total: number }[]>`
+    SELECT count(*)::int AS total
+    FROM "Article"
+    WHERE ${where}
+  `;
+  const total = countRows?.total ?? 0;
+
+  if (!rows.length) {
+    return { items: [], total, ...paginationMeta(total, page, perPage) };
+  }
+
+  const items = await db.article.findMany({
+    where: { id: { in: rows.map((r) => r.id) } },
+    include: articleInclude,
+  });
+  const byId = new Map(items.map((a) => [a.id, a]));
+  const ordered = rows
+    .map((r) => byId.get(r.id))
+    .filter((a): a is ArticleWithRelations => Boolean(a));
+
+  return { items: ordered, total, ...paginationMeta(total, page, perPage) };
 }
 
 /* ================= Admin queries ================= */
