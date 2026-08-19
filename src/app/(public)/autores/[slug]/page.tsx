@@ -60,7 +60,6 @@ export default async function AuthorPage(props: { params: Promise<{ slug: string
             ringClassName="ring-4 ring-white/30"
           />
           <div>
-            <span className="hand block -rotate-2 text-2xl text-key-lime">conoce a</span>
             <h1 className="display text-4xl sm:text-5xl">{author.name}</h1>
             <p className="mt-1 text-white/80">
               {[author.role, author.program].filter(Boolean).join(" · ") || "Colaborador de KEY"}

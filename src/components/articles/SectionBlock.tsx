@@ -23,12 +23,12 @@ export function SectionBlock({
           <div className="flex items-center gap-3">
             <span className="h-8 w-2 rounded-full" style={{ backgroundColor: meta?.color }} aria-hidden />
             <div>
-              <span className="hand block -rotate-2 text-xl" style={{ color: meta?.color }}>
-                {layout === "row" ? "sección destacada" : "más de"}
-              </span>
               <h2 className="display text-3xl sm:text-4xl" style={{ color: meta?.color }}>
                 {meta?.shortLabel}
               </h2>
+              {meta?.description && (
+                <p className="mt-1 line-clamp-1 max-w-xl text-sm leading-6 text-key-muted">{meta.description}</p>
+              )}
             </div>
           </div>
           <Link

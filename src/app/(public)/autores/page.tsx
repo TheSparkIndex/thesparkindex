@@ -12,7 +12,6 @@ export default async function AuthorsPage() {
   return (
     <>
       <section className="container-key py-12 sm:py-16">
-        <span className="hand block -rotate-2 text-2xl text-key-primary">las voces</span>
         <h1 className="display text-4xl sm:text-5xl">Nuestros autores</h1>
         <p className="mt-3 max-w-xl text-key-muted">
           Estudiantes, docentes y mentores que escriben, entrevistan, fotografían y editan cada historia.

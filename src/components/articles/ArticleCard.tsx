@@ -40,7 +40,6 @@ export function ArticleCard({
 }) {
   const img = cardImage(article, variant === "featured" || variant === "large" ? "hero" : "card");
   const author = primaryAuthor(article);
-  const isInterview = article.section?.slug === "entrevistas";
 
   return (
     <article
@@ -67,9 +66,6 @@ export function ArticleCard({
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center gap-2">
           <SectionBadge sectionSlug={article.section?.slug} small />
-          {isInterview && variant === "interview" && (
-            <span className="hand rotate-[-3deg] text-base text-key-indigo">una charla con…</span>
-          )}
         </div>
 
         <h3 className={titles[variant]}>

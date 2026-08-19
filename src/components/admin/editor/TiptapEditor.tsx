@@ -208,7 +208,7 @@ export const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(function Tipta
           <Quote className="size-4" />
         </ToolButton>
         <ToolButton label="Cita destacada" active={editor.isActive("pullQuote")} onClick={togglePullQuote}>
-          <span className="hand -rotate-3 text-lg leading-none">cita</span>
+          <span className="text-sm font-bold leading-none">Cita</span>
         </ToolButton>
         <ToolButton label="Bloque de código" active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()}>
           <Code2 className="size-4" />

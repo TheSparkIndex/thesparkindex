@@ -44,7 +44,6 @@ export function AdminShell({ children, userName }: { children: React.ReactNode; 
         <div className="flex items-center justify-between px-5 py-5">
           <Link href="/admin/dashboard" className="flex items-baseline gap-1.5">
             <span className="display text-xl font-black text-white">KEY.</span>
-            <span className="hand text-base -rotate-2 text-key-lime">panel</span>
           </Link>
           <button
             type="button"

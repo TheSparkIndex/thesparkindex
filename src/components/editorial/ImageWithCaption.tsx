@@ -40,7 +40,7 @@ export function ImageWithCaption({
           />
         ) : (
           <div className="grid h-full w-full place-items-center bg-key-surface-alt">
-            <span className="hand text-2xl text-key-muted">KEY</span>
+            <span className="text-2xl font-bold text-key-muted">KEY</span>
           </div>
         )}
       </div>

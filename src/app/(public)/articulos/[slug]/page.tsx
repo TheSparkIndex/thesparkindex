@@ -185,12 +185,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </article>
 
       <div className="container-key pb-16">
+        <RelatedArticles articles={related} />
         <MoreFromAuthor
           articles={moreFromAuthor.items.filter((a) => a.id !== article.id).slice(0, 3)}
           authorSlug={primary?.slug ?? ""}
           authorName={primary?.name ?? "este autor"}
         />
-        <RelatedArticles articles={related} />
       </div>
     </>
   );

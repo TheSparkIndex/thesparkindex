@@ -8,7 +8,6 @@ import {
 import { ArticleHero } from "@/components/articles/ArticleHero";
 import { MagazineGrid } from "@/components/articles/MagazineGrid";
 import { SectionBlock } from "@/components/articles/SectionBlock";
-import { HeadlineTicker } from "@/components/layout/HeadlineTicker";
 import { Container } from "@/components/ui/Container";
 import { SECTIONS } from "@/lib/site";
 
@@ -38,8 +37,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeadlineTicker articles={latest} />
-
       <section className="container-key flex flex-col gap-8 py-10 sm:py-14">
         <div className="flex items-center gap-3">
           <Zap className="size-5 text-key-orange" aria-hidden />
@@ -79,7 +76,6 @@ export default async function HomePage() {
         <div className="bg-dotgrid-ink absolute inset-0 opacity-40" aria-hidden />
         <Container className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="hand block -rotate-2 text-2xl text-key-lime">hey, futuro creador</span>
             <h2 className="display mt-1 text-3xl sm:text-4xl">
               Las historias de Key recién salidas del laboratorio.
             </h2>

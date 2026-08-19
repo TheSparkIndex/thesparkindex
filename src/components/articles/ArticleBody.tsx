@@ -52,7 +52,6 @@ function PullQuote({ node }: { node: Node }) {
   return (
     <figure className="my-10 rounded-r-card border-l-4 bg-key-primary-soft px-6 py-6 sm:px-8 sm:py-8" style={{ borderColor: "var(--color-key-primary)" }}>
       <blockquote className="display text-2xl leading-snug text-key-ink sm:text-3xl">{text}</blockquote>
-      <figcaption className="hand mt-3 rotate-[-2deg] text-xl text-key-primary">dilo fuerte, sí.</figcaption>
     </figure>
   );
 }

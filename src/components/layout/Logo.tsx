@@ -23,8 +23,8 @@ export function Logo({ className, dark }: Props) {
       </span>
       <span
         className={cn(
-          "hand text-lg leading-none -rotate-3",
-          dark ? "text-key-lime" : "text-key-primary"
+          "text-lg leading-none font-bold tracking-tight",
+          dark ? "text-key-primary" : "text-key-primary"
         )}
       >
         The Spark Index

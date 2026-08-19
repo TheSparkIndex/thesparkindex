@@ -31,7 +31,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <section className="container-key py-12 sm:py-16">
-      <span className="hand block -rotate-2 text-2xl text-key-primary">encuentra lo que buscas</span>
       <h1 className="display text-4xl sm:text-5xl">Buscar</h1>
 
       <div className="mt-8 max-w-2xl">

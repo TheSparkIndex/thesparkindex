@@ -56,9 +56,6 @@ export function ArticleHero({ article }: { article: ArticleWithRelations }) {
             >
               Leer historia <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <span className="hand rotate-[-4deg] text-2xl text-key-lime" aria-hidden>
-              ¡esta es la buena!
-            </span>
           </div>
         </div>
       </div>

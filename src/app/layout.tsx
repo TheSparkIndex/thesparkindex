@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Albert_Sans, Caveat } from "next/font/google";
+import { Albert_Sans } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -7,13 +7,6 @@ const albert = Albert_Sans({
   variable: "--font-albert",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -45,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${albert.variable} ${caveat.variable} h-full antialiased`}
+      className={`${albert.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-key-white text-key-ink">
         {children}

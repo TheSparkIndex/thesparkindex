@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
           <span className="display block text-3xl text-white">
             KEY<span className="text-key-primary">.</span>
           </span>
-          <span className="hand mt-1 block -rotate-2 text-2xl text-key-lime">The Spark Index</span>
+          <span className="mt-1 block text-2xl font-bold tracking-tight text-white">The Spark Index</span>
           <p className="kicker mt-3 text-white/60">Panel editorial</p>
         </div>
 
