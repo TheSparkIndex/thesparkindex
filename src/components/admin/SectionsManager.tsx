@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Save, ImagePlus } from "lucide-react";
-import { saveSection } from "@/lib/actions/admin";
+import { saveSection, deleteSection } from "@/lib/actions/admin";
 import { slugify } from "@/lib/utils";
 import { useMediaPicker } from "./MediaPicker";
 import { ErrorBox } from "./ui";
@@ -41,6 +41,7 @@ function SectionEditor({ section, onSaved }: { section: SectionRow; onSaved: () 
   const [imageId, setImageId] = useState(section.imageId ?? "");
   const [imageUrl, setImageUrl] = useState<string | null>(section.image?.variants?.card?.url ?? section.image?.url ?? null);
   const [slugTouched, setSlugTouched] = useState(Boolean(section.slug));
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const mediaPicker = useMediaPicker();
 
   return (
@@ -120,7 +121,26 @@ function SectionEditor({ section, onSaved }: { section: SectionRow; onSaved: () 
       {error && <ErrorBox message={error} />}
 
       <div className="mt-3 flex items-center justify-between">
-        <span className="text-xs text-key-muted">{section._count ? `${section._count.articles} artículos` : "Nueva sección"}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-key-muted">{section._count ? `${section._count.articles} artículos` : "Nueva sección"}</span>
+          {section.id && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => {
+                if (!confirmDelete) { setConfirmDelete(true); setTimeout(() => setConfirmDelete(false), 3000); return; }
+                startTransition(async () => {
+                  const res = await deleteSection(section.id);
+                  if (res?.error) setError(res.error);
+                  else { onSaved(); router.refresh(); }
+                });
+              }}
+              className="text-xs font-bold text-key-muted transition-colors hover:text-key-orange"
+            >
+              {confirmDelete ? "¿Seguro?" : "Eliminar"}
+            </button>
+          )}
+        </div>
         <button
           type="submit"
           disabled={pending}

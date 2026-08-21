@@ -340,6 +340,20 @@ export async function saveSection(input: FormData): Promise<{ ok?: boolean; erro
   return { ok: true };
 }
 
+export async function deleteSection(id: string): Promise<{ error?: string }> {
+  await requireAdmin();
+  const section = await db.section.findUnique({ where: { id }, include: { _count: { select: { articles: true } } } });
+  if (!section) return { error: "Sección no encontrada." };
+  if (section._count.articles > 0) return { error: `No se puede eliminar: la sección tiene ${section._count.articles} artículo(s) asociados.` };
+  try {
+    await db.section.delete({ where: { id } });
+    revalidateAll();
+    return {};
+  } catch {
+    return { error: "No se pudo eliminar la sección." };
+  }
+}
+
 /* ============ Media ============ */
 
 export async function updateMediaMeta(
