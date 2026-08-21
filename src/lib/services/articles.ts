@@ -343,3 +343,19 @@ export async function adminRecentActivity(limit = 8) {
 }
 
 export type { Article };
+
+export async function getVisitorStats() {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekStart = new Date(todayStart);
+  weekStart.setDate(weekStart.getDate() - 7);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const [today, thisWeek, thisMonth, total] = await Promise.all([
+    db.pageView.count({ where: { createdAt: { gte: todayStart } } }),
+    db.pageView.count({ where: { createdAt: { gte: weekStart } } }),
+    db.pageView.count({ where: { createdAt: { gte: monthStart } } }),
+    db.pageView.count(),
+  ]);
+  return { today, thisWeek, thisMonth, total };
+}

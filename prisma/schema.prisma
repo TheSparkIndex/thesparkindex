@@ -184,3 +184,11 @@ model Subscriber {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 }
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  createdAt DateTime @default(now())
+
+  @@index([path, createdAt])
+}

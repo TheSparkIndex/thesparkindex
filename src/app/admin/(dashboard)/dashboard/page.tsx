@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { FileText, DraftingCompass, CalendarClock, Users, Images, Star, Plus } from "lucide-react";
-import { adminDashboardStats, adminRecentActivity } from "@/lib/services/articles";
+import { FileText, DraftingCompass, CalendarClock, Users, Images, Star, Plus, Eye } from "lucide-react";
+import { adminDashboardStats, adminRecentActivity, getVisitorStats } from "@/lib/services/articles";
 import { PageHeader, Card, StatusBadge } from "@/components/admin/ui";
 import { cn } from "@/lib/utils";
 import { ArticleStatus } from "@/generated/prisma/client";
@@ -30,8 +30,11 @@ function formatDate(d: Date) {
 }
 
 export default async function AdminDashboardPage() {
-  const stats = await adminDashboardStats();
-  const activity = await adminRecentActivity();
+  const [stats, activity, visitors] = await Promise.all([
+    adminDashboardStats(),
+    adminRecentActivity(),
+    getVisitorStats(),
+  ]);
 
   const tiles = [
     { label: "Publicados", value: stats.published, icon: FileText, href: "/admin/articulos?status=published", tone: "bg-key-primary" },
@@ -40,6 +43,8 @@ export default async function AdminDashboardPage() {
     { label: "Autores", value: stats.authors, icon: Users, href: "/admin/autores", tone: "bg-key-ink" },
     { label: "Archivos media", value: stats.mediaCount, icon: Images, href: "/admin/media", tone: "bg-key-lime" },
     { label: "Destacados", value: stats.featured, icon: Star, href: "/admin/articulos?featured=1", tone: "bg-key-lime-soft text-key-ink" },
+    { label: "Visitas hoy", value: visitors.today, icon: Eye, href: "#", tone: "bg-key-primary" },
+    { label: "Visitas (7d)", value: visitors.thisWeek, icon: Eye, href: "#", tone: "bg-key-primary" },
   ];
 
   return (
@@ -57,7 +62,7 @@ export default async function AdminDashboardPage() {
         }
       />
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
         {tiles.map((t) => (
           <Link
             key={t.label}
