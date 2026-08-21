@@ -7,7 +7,7 @@ import { ImagePlus } from "lucide-react";
 import { saveAuthor } from "@/lib/actions/admin";
 import { slugify } from "@/lib/utils";
 import { useMediaPicker } from "./MediaPicker";
-import { Card, Checkbox, ErrorBox, Field, SubmitButton, Textarea } from "./ui";
+import { Card, Checkbox, ErrorBox, Field, SubmitButton, SuccessBox, Textarea } from "./ui";
 
 type AuthorFormData = {
   id?: string;
@@ -176,6 +176,7 @@ export function AuthorForm({ author }: { author?: AuthorFormData }) {
 
         <div className="flex flex-col gap-3">
           <ErrorBox message={state?.error} />
+          {state?.ok && <SuccessBox message={author ? "Autor actualizado con éxito." : "Autor creado con éxito."} />}
           <SubmitButton pending={pending}>{author ? "Guardar cambios" : "Crear autor/a"}</SubmitButton>
         </div>
       </div>

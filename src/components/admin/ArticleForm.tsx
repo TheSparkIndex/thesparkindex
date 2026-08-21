@@ -7,7 +7,7 @@ import { saveArticle } from "@/lib/actions/admin";
 import { slugify } from "@/lib/utils";
 import { TiptapEditor, type TiptapEditorHandle } from "./editor/TiptapEditor";
 import { useMediaPicker } from "./MediaPicker";
-import { Card, Checkbox, ErrorBox, Select, SubmitButton } from "./ui";
+import { Card, Checkbox, ErrorBox, Select, SubmitButton, SuccessBox } from "./ui";
 
 type AuthorOption = { id: string; name: string };
 type Contributor = { authorId: string; role: "author" | "collaborator" | "photographer" | "editor" };
@@ -351,6 +351,7 @@ export function ArticleForm({
 
         <div className="flex flex-col gap-3">
           <ErrorBox message={state?.error} />
+          {state?.ok && <SuccessBox message={article ? "Artículo guardado con éxito." : "Artículo creado con éxito."} />}
           <SubmitButton pending={pending}>{article ? "Guardar cambios" : "Crear artículo"}</SubmitButton>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function PageHeader({
@@ -221,6 +221,16 @@ export function ErrorBox({ message }: { message?: string | null }) {
   return (
     <p role="alert" className="flex items-start gap-2 rounded-lg bg-key-orange/10 px-3 py-2.5 text-sm font-semibold text-key-orange">
       <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+      {message}
+    </p>
+  );
+}
+
+export function SuccessBox({ message }: { message?: string | null }) {
+  if (!message) return null;
+  return (
+    <p role="status" className="flex items-start gap-2 rounded-lg bg-green-50 px-3 py-2.5 text-sm font-semibold text-green-700">
+      <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
       {message}
     </p>
   );
