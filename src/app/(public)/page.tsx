@@ -6,9 +6,11 @@ import {
   getArticlesBySection,
 } from "@/lib/services/articles";
 import { getPublicSections } from "@/lib/services/sections";
+import { getSettings } from "@/lib/services/settings";
 import { ArticleHero } from "@/components/articles/ArticleHero";
 import { MagazineGrid } from "@/components/articles/MagazineGrid";
 import { SectionBlock } from "@/components/articles/SectionBlock";
+import { HomeBanner } from "@/components/public/HomeBanner";
 import { Container } from "@/components/ui/Container";
 
 export const revalidate = 300;
@@ -24,6 +26,7 @@ const SECTION_CONFIG: Record<string, { layout: "row" | "list" | "single"; perPag
 export default async function HomePage() {
   const sections = await getPublicSections();
   const sectionBlocks = sections.filter((s) => SECTION_CONFIG[s.slug]);
+  const settings = await getSettings();
 
   const [featured, latest, ...sectionsData] = await Promise.all([
     getFeaturedArticle(),
@@ -38,6 +41,14 @@ export default async function HomePage() {
 
   return (
     <>
+      {settings.bannerEnabled && settings.bannerTitle && (
+        <HomeBanner
+          title={settings.bannerTitle}
+          subtitle={settings.bannerSubtitle}
+          articleSlug={settings.bannerArticleSlug}
+        />
+      )}
+
       <section className="container-key flex flex-col gap-8 py-10 sm:py-14">
         <div className="flex items-center gap-3">
           <Zap className="size-5 text-key-orange" aria-hidden />

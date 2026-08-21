@@ -453,6 +453,10 @@ export async function saveSettings(input: FormData): Promise<{ ok?: boolean; err
     tiktok: (input.get("tiktok") as string) || null,
     twitter: (input.get("twitter") as string) || null,
     description: (input.get("description") as string) || null,
+    bannerTitle: (input.get("bannerTitle") as string) || null,
+    bannerSubtitle: (input.get("bannerSubtitle") as string) || null,
+    bannerArticleSlug: (input.get("bannerArticleSlug") as string) || null,
+    bannerEnabled: input.get("bannerEnabled") === "on" || input.get("bannerEnabled") === "true",
   };
   try {
     settingsSchema.parse(raw);

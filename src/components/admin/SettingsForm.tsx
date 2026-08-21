@@ -11,6 +11,10 @@ type Settings = {
   tiktok?: unknown;
   twitter?: unknown;
   description?: unknown;
+  bannerTitle?: unknown;
+  bannerSubtitle?: unknown;
+  bannerArticleSlug?: unknown;
+  bannerEnabled?: unknown;
 };
 
 function str(v: unknown): string {
@@ -45,6 +49,25 @@ export function SettingsForm({ settings }: { settings: Settings }) {
           <Field label="Instagram" name="instagram" defaultValue={str(settings.instagram)} placeholder="@key.magazine" />
           <Field label="TikTok" name="tiktok" defaultValue={str(settings.tiktok)} placeholder="@key.magazine" />
           <Field label="X / Twitter" name="twitter" defaultValue={str(settings.twitter)} placeholder="@keymagazine" />
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="mb-4 text-sm font-extrabold uppercase tracking-wide text-key-muted">Banner de portada</h2>
+        <p className="mb-4 text-xs text-key-muted">Muestra un banner destacado arriba de la página de inicio.</p>
+        <div className="space-y-4">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-key-ink">
+            <input
+              type="checkbox"
+              name="bannerEnabled"
+              defaultChecked={settings.bannerEnabled === true || settings.bannerEnabled === "true"}
+              className="size-4 rounded border-key-border accent-key-primary"
+            />
+            Activar banner
+          </label>
+          <Field label="Título del banner" name="bannerTitle" defaultValue={str(settings.bannerTitle)} placeholder="Nuestra razón de ser" />
+          <Field label="Subtítulo" name="bannerSubtitle" defaultValue={str(settings.bannerSubtitle)} placeholder="Una frase que acompañe el título" />
+          <Field label="Slug del artículo" name="bannerArticleSlug" defaultValue={str(settings.bannerArticleSlug)} placeholder="nombre-del-articulo" hint="El slug del artículo al que enlaza el botón." />
         </div>
       </Card>
 
