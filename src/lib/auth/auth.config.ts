@@ -62,7 +62,8 @@ export const authConfig = {
         !path.startsWith("/admin/login") &&
         !path.startsWith("/api/auth");
       if (isProtected) {
-        return isLoggedIn;
+        if (!isLoggedIn) return false;
+        if (auth?.user?.role !== "superadmin") return false;
       }
       return true;
     },

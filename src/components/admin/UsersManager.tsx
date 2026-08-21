@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, ShieldAlert, Save } from "lucide-react";
 import { deleteUser, saveUser } from "@/lib/actions/admin";
-import { Checkbox, ConfirmButton, ErrorBox, Select, StatusBadge } from "./ui";
+import { Checkbox, ConfirmButton, ErrorBox, StatusBadge } from "./ui";
 
 type UserRow = {
   id: string;
@@ -14,14 +14,6 @@ type UserRow = {
   isActive: boolean;
   createdAt: Date;
 };
-
-const ROLES: Array<{ value: UserRow["role"]; label: string }> = [
-  { value: "viewer", label: "Viewer" },
-  { value: "author", label: "Autor" },
-  { value: "editor", label: "Editor" },
-  { value: "admin", label: "Admin" },
-  { value: "superadmin", label: "Superadmin" },
-];
 
 const ROLE_STYLE: Record<UserRow["role"], string> = {
   viewer: "bg-key-muted-soft text-key-muted",
@@ -35,7 +27,6 @@ function UserEditor({ user, onDone }: { user?: UserRow; onDone: () => void }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [role, setRole] = useState<UserRow["role"]>(user?.role ?? "viewer");
   const [isActive, setIsActive] = useState(user?.isActive ?? true);
 
   return (
@@ -53,7 +44,7 @@ function UserEditor({ user, onDone }: { user?: UserRow; onDone: () => void }) {
       className="rounded-2xl border border-key-border bg-key-white p-5 shadow-sm"
     >
       {user ? <input type="hidden" name="id" value={user.id} /> : null}
-      <input type="hidden" name="role" value={role} />
+      <input type="hidden" name="role" value="superadmin" />
       <input type="hidden" name="isActive" value={isActive ? "on" : ""} />
 
       <h3 className="mb-3 text-sm font-extrabold uppercase tracking-wide text-key-muted">
@@ -83,14 +74,6 @@ function UserEditor({ user, onDone }: { user?: UserRow; onDone: () => void }) {
           required={!user}
           placeholder={user ? "Nueva contraseña (opcional)" : "Contraseña (mín. 8 caracteres)"}
           className="h-10 rounded-lg border-2 border-key-border bg-key-surface px-3 text-sm outline-none focus:border-key-primary"
-        />
-        <Select
-          label="Rol"
-          name="role"
-          value={role}
-          onChangeValue={(v) => setRole(v as UserRow["role"])}
-          options={ROLES}
-          className="h-10"
         />
       </div>
 

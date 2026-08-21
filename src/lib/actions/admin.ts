@@ -393,7 +393,7 @@ export async function deleteMedia(id: string): Promise<{ error?: string }> {
 /* ============ Users ============ */
 
 export async function saveUser(input: FormData): Promise<{ ok?: boolean; error?: string }> {
-  await requireAdmin("superadmin");
+  await requireAdmin();
   let parsed: z.infer<typeof userSchema>;
   try {
     parsed = userSchema.parse({
@@ -435,7 +435,7 @@ export async function saveUser(input: FormData): Promise<{ ok?: boolean; error?:
 }
 
 export async function deleteUser(id: string): Promise<{ error?: string }> {
-  const session = await requireAdmin("superadmin");
+  const session = await requireAdmin();
   if (session.user.id === id) return { error: "No puedes eliminar tu propio usuario." };
   await db.user.delete({ where: { id } });
   revalidatePath("/admin/usuarios");
