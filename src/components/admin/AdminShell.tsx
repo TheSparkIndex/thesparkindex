@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ const NAV = [
   { href: "/admin/media", label: "Media", icon: Images },
   { href: "/admin/secciones", label: "Secciones", icon: Tags },
   { href: "/admin/usuarios", label: "Usuarios", icon: UserCog },
+  { href: "/admin/suscriptores", label: "Suscriptores", icon: Mail },
   { href: "/admin/configuracion", label: "Configuración", icon: Settings },
 ];
 

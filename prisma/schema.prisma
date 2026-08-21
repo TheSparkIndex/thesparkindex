@@ -176,3 +176,11 @@ model Setting {
   key   String @id
   value Json
 }
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

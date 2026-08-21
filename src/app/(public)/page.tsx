@@ -11,6 +11,7 @@ import { ArticleHero } from "@/components/articles/ArticleHero";
 import { MagazineGrid } from "@/components/articles/MagazineGrid";
 import { SectionBlock } from "@/components/articles/SectionBlock";
 import { HomeBanner } from "@/components/public/HomeBanner";
+import { NewsletterSubscribe } from "@/components/public/NewsletterSubscribe";
 import { Container } from "@/components/ui/Container";
 
 export const revalidate = 300;
@@ -84,6 +85,8 @@ export default async function HomePage() {
           />
         ))}
       </div>
+
+      <NewsletterSubscribe />
 
       <section className="relative overflow-hidden bg-key-ink py-16 text-white">
         <div className="bg-dotgrid-ink absolute inset-0 opacity-40" aria-hidden />
