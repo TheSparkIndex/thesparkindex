@@ -25,7 +25,7 @@ export function ArticleHero({ article }: { article: ArticleWithRelations }) {
         </div>
 
         <div className="flex flex-col justify-center gap-5 bg-key-primary p-6 sm:p-10 lg:p-12">
-          <SectionBadge sectionSlug={article.section?.slug} className="self-start" />
+          <SectionBadge sectionSlug={article.section?.slug} color={article.section?.color} className="self-start">{article.section?.name}</SectionBadge>
           <h1 className="display text-3xl text-white sm:text-4xl lg:text-5xl text-balance">
             <Link href={`/articulos/${article.slug}`} className="hover:underline decoration-key-lime decoration-4 underline-offset-4">
               {article.title}

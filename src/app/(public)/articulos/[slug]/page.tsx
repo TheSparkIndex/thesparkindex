@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronRight, Info } from "lucide-react";
 import { getArticleBySlug, getRelatedArticles, getArticlesByAuthor } from "@/lib/services/articles";
 import { primaryAuthor, articleMinutes, cardImage, byline } from "@/lib/article";
-import { SITE, getSection } from "@/lib/site";
+import { SITE } from "@/lib/site";
 import { ArticleBody } from "@/components/articles/ArticleBody";
 import { AuthorByline } from "@/components/articles/AuthorByline";
 import { ShareButtons } from "@/components/articles/ShareButtons";
@@ -85,7 +85,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   ]);
 
   const heroImg = cardImage(article, "hero") ?? cardImage(article, "wide");
-  const sectionMeta = article.section ? getSection(article.section.slug) : undefined;
   const jsonLd = articleJsonLd(article);
   const breadcrumb = [
     { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE.url}/` },
@@ -119,7 +118,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {article.section && (
             <>
               <Link href={`/${article.section.slug}`} className="hover:text-key-primary">
-                {sectionMeta?.shortLabel ?? article.section.name}
+                {article.section.name}
               </Link>
               <ChevronRight className="size-3" aria-hidden />
             </>
@@ -128,7 +127,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </nav>
 
         <header>
-          <SectionBadge sectionSlug={article.section?.slug} />
+          <SectionBadge sectionSlug={article.section?.slug} color={article.section?.color}>{article.section?.name}</SectionBadge>
           <h1 className="display mt-4 text-3xl sm:text-5xl text-balance">{article.title}</h1>
           {article.subtitle && <p className="mt-4 text-lg leading-7 text-key-muted sm:text-xl">{article.subtitle}</p>}
 

@@ -1,4 +1,4 @@
-import { getSection } from "@/lib/site";
+import { getSection, type SectionMeta } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function SectionHeader({
@@ -8,6 +8,7 @@ export function SectionHeader({
   color,
   count,
   className,
+  meta: metaProp,
 }: {
   sectionSlug: string;
   title?: string;
@@ -15,8 +16,9 @@ export function SectionHeader({
   color?: string;
   count?: number;
   className?: string;
+  meta?: SectionMeta;
 }) {
-  const meta = getSection(sectionSlug);
+  const meta = metaProp ?? getSection(sectionSlug);
   const resolvedColor = color ?? meta?.color ?? "#026DFD";
   const resolvedTitle = title ?? meta?.label ?? sectionSlug;
   const resolvedDescription = description ?? meta?.description;

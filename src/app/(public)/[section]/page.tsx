@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSection, SECTIONS } from "@/lib/site";
+import { getPublicSections, getPublicSection } from "@/lib/services/sections";
 import { getArticlesBySection, getFeaturedBySection } from "@/lib/services/articles";
 import { SectionHeader } from "@/components/editorial/SectionHeader";
 import { SectionBadge } from "@/components/ui/SectionBadge";
@@ -9,12 +9,13 @@ import { Pagination } from "@/components/articles/Pagination";
 import { EmptyState } from "@/components/editorial/EmptyState";
 
 export async function generateStaticParams() {
-  return SECTIONS.map((s) => ({ section: s.slug }));
+  const sections = await getPublicSections();
+  return sections.map((s) => ({ section: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
-  const meta = getSection(section);
+  const meta = await getPublicSection(section);
   if (!meta) return {};
   return {
     title: meta.shortLabel,
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ section: 
 export default async function SectionPage(props: { params: Promise<{ section: string }>; searchParams: Promise<{ page?: string }> }) {
   const { section } = await props.params;
   const searchParams = await props.searchParams;
-  const meta = getSection(section);
+  const meta = await getPublicSection(section);
   if (!meta) notFound();
 
   const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
@@ -39,12 +40,12 @@ export default async function SectionPage(props: { params: Promise<{ section: st
 
   return (
     <>
-      <SectionHeader sectionSlug={section} count={data.total} />
+      <SectionHeader sectionSlug={section} count={data.total} meta={meta} />
 
       {hero && (
         <section className="container-key py-10">
           <div className="mb-6">
-            <SectionBadge sectionSlug={section} small />
+            <SectionBadge sectionSlug={section} color={meta.color} small>{meta.shortLabel}</SectionBadge>
           </div>
           <ArticleCard article={hero} variant="featured" className="grid-cols-1" priority />
         </section>

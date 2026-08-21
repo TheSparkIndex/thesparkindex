@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Search } from "lucide-react";
-import { SECTIONS as SITE_SECTIONS } from "@/lib/site";
+import { DEFAULT_SECTIONS as SITE_SECTIONS } from "@/lib/site";
 
 const SECTIONS = [
   { slug: "", label: "Todas las secciones" },

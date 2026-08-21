@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { SECTIONS } from "@/lib/site";
+import type { SectionMeta } from "@/lib/site";
 import { Container } from "@/components/ui/Container";
 
-export function Footer() {
+export function Footer({ sections }: { sections: SectionMeta[] }) {
   return (
     <footer className="mt-auto border-t-2 border-key-ink bg-key-ink text-key-white">
       <Container className="py-12">
@@ -20,7 +20,7 @@ export function Footer() {
           <nav aria-label="Secciones">
             <h3 className="kicker mb-4 text-key-primary">Secciones</h3>
             <ul className="space-y-2 text-sm">
-              {SECTIONS.map((s) => (
+              {sections.map((s) => (
                 <li key={s.slug}>
                   <Link href={`/${s.slug}`} className="text-white/80 transition-colors hover:text-key-primary">
                     {s.shortLabel}

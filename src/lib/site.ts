@@ -13,7 +13,7 @@ export type SectionMeta = {
   colorVar: string;
 };
 
-export const SECTIONS: SectionMeta[] = [
+export const DEFAULT_SECTIONS: SectionMeta[] = [
   {
     slug: "noticias",
     label: "Noticias",
@@ -62,5 +62,5 @@ export const SECTIONS: SectionMeta[] = [
 ];
 
 export function getSection(slug: string): SectionMeta | undefined {
-  return SECTIONS.find((s) => s.slug === slug);
+  return DEFAULT_SECTIONS.find((s) => s.slug === slug);
 }

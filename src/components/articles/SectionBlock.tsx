@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getSection } from "@/lib/site";
+import { getSection, type SectionMeta } from "@/lib/site";
 import type { ArticleWithRelations } from "@/lib/services/articles";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 
@@ -8,12 +8,14 @@ export function SectionBlock({
   sectionSlug,
   articles,
   layout = "row",
+  meta: metaProp,
 }: {
   sectionSlug: string;
   articles: ArticleWithRelations[];
   layout?: "row" | "list" | "single";
+  meta?: SectionMeta;
 }) {
-  const meta = getSection(sectionSlug);
+  const meta = metaProp ?? getSection(sectionSlug);
   if (!articles.length) return null;
 
   return (

@@ -6,15 +6,15 @@ import { usePathname } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
-import { SECTIONS } from "@/lib/site";
+import type { SectionMeta } from "@/lib/site";
 
-const NAV = SECTIONS.map((s) => ({
-  label: s.shortLabel,
-  href: `/${s.slug}`,
-  color: s.color,
-}));
+export function Header({ sections }: { sections: SectionMeta[] }) {
+  const NAV = sections.map((s) => ({
+    label: s.shortLabel,
+    href: `/${s.slug}`,
+    color: s.color,
+  }));
 
-export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth/guard";
-import { SECTIONS } from "@/lib/site";
+import { DEFAULT_SECTIONS } from "@/lib/site";
 import { ArticleStatus, ContributorRole, type Prisma, type UserRole } from "@/generated/prisma/client";
 import {
   articleSchema,
@@ -18,10 +18,12 @@ import { sanitizeContent } from "@/lib/content/sanitize";
 import { slugify } from "@/lib/utils";
 import { storage } from "@/lib/storage";
 
-function revalidateAll() {
+async function revalidateAll() {
   revalidatePath("/");
   revalidatePath("/buscar");
-  for (const section of SECTIONS) revalidatePath(`/${section.slug}`);
+  const sections = await db.section.findMany({ select: { slug: true } });
+  const slugs = sections.length > 0 ? sections.map((s) => s.slug) : DEFAULT_SECTIONS.map((s) => s.slug);
+  for (const slug of slugs) revalidatePath(`/${slug}`);
 }
 
 function toSlug(input: string): string {

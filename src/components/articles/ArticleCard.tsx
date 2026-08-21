@@ -65,7 +65,7 @@ export function ArticleCard({
 
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center gap-2">
-          <SectionBadge sectionSlug={article.section?.slug} small />
+          <SectionBadge sectionSlug={article.section?.slug} color={article.section?.color} small>{article.section?.name}</SectionBadge>
         </div>
 
         <h3 className={titles[variant]}>

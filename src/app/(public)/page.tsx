@@ -5,11 +5,11 @@ import {
   getLatestArticles,
   getArticlesBySection,
 } from "@/lib/services/articles";
+import { getPublicSections } from "@/lib/services/sections";
 import { ArticleHero } from "@/components/articles/ArticleHero";
 import { MagazineGrid } from "@/components/articles/MagazineGrid";
 import { SectionBlock } from "@/components/articles/SectionBlock";
 import { Container } from "@/components/ui/Container";
-import { SECTIONS } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -21,9 +21,10 @@ const SECTION_CONFIG: Record<string, { layout: "row" | "list" | "single"; perPag
   "valores-key": { layout: "single", perPage: 2 },
 };
 
-const sectionBlocks = SECTIONS.filter((s) => SECTION_CONFIG[s.slug]);
-
 export default async function HomePage() {
+  const sections = await getPublicSections();
+  const sectionBlocks = sections.filter((s) => SECTION_CONFIG[s.slug]);
+
   const [featured, latest, ...sectionsData] = await Promise.all([
     getFeaturedArticle(),
     getLatestArticles(12),
@@ -68,6 +69,7 @@ export default async function HomePage() {
             sectionSlug={s.slug}
             articles={sectionsData[i].items}
             layout={SECTION_CONFIG[s.slug].layout}
+            meta={s}
           />
         ))}
       </div>
