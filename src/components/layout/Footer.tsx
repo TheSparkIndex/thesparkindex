@@ -45,6 +45,11 @@ export function Footer({ sections }: { sections: SectionMeta[] }) {
                 </Link>
               </li>
               <li>
+                <Link href="/contacto" className="text-white/80 transition-colors hover:text-key-primary">
+                  Contáctanos
+                </Link>
+              </li>
+              <li>
                 <Link href="/admin/login" className="text-white/50 transition-colors hover:text-key-primary">
                   Acceso editorial
                 </Link>
