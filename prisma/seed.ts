@@ -55,7 +55,7 @@ const image = (src: string, alt: string): TipNode => ({ type: "image", attrs: { 
 
 const youtube = (src: string): TipNode => ({ type: "youtube", attrs: { src }, content: [] });
 
-async function writeSvg(media: { slug: string; label: string; color: string; subtitle?: string }) {
+async function writeSvg(media: { slug: string; color: string }) {
   const key = `images/seed-cover-${media.slug}/original.svg`;
   const file = path.join(UPLOADS, key);
   const light = `${media.color}20`;
@@ -70,9 +70,6 @@ async function writeSvg(media: { slug: string; label: string; color: string; sub
   <circle cx="1100" cy="120" r="180" fill="${light}"/>
   <circle cx="180" cy="620" r="240" fill="${light}"/>
   <circle cx="640" cy="360" r="300" fill="#ffffff08"/>
-  <text x="70" y="200" font-family="Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="6" fill="#ffffff">KEY</text>
-  <text x="70" y="400" font-family="Georgia, serif" font-size="88" font-weight="900" fill="#ffffff">${media.label}</text>
-  ${media.subtitle ? `<text x="70" y="470" font-family="Arial, sans-serif" font-size="30" fill="#ffffffcc">${media.subtitle}</text>` : ""}
 </svg>`;
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, svg, "utf8");
@@ -82,8 +79,9 @@ async function writeSvg(media: { slug: string; label: string; color: string; sub
   };
 }
 
-async function createCoverMedia(slug: string, label: string, color: string, subtitle?: string) {
-  const svg = await writeSvg({ slug, label, color, subtitle });
+async function createCoverMedia(slug: string, label: string, color: string) {
+  await db.media.deleteMany({ where: { filename: `${slug}.svg` } });
+  const svg = await writeSvg({ slug, color });
   return db.media.create({
     data: {
       filename: `${slug}.svg`,
@@ -441,7 +439,7 @@ async function main() {
   for (const a of articles) {
     const section = await db.section.findUnique({ where: { slug: a.section } });
     if (!section) continue;
-    const cover = await createCoverMedia(a.slug, a.title.length > 26 ? a.title.slice(0, 26) + "…" : a.title, section.color ?? "#026DFD", a.subtitle);
+    const cover = await createCoverMedia(a.slug, a.title.length > 26 ? a.title.slice(0, 26) + "…" : a.title, section.color ?? "#026DFD");
 
     const content = a.content.map((node) => {
       if (node.type === "image") return image(cover.url, String(node.attrs?.alt ?? a.title));
