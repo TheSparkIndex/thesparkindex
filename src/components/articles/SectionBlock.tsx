@@ -22,8 +22,8 @@ export function SectionBlock({
     <section className="border-t-2 border-key-ink/80 py-12 sm:py-16">
       <div className="container-key">
         <div className="mb-6 flex items-end justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="h-8 w-2 rounded-full" style={{ backgroundColor: meta?.color }} aria-hidden />
+          <div className="flex items-stretch gap-3">
+            <span className="w-2 rounded-full" style={{ backgroundColor: meta?.color }} aria-hidden />
             <div>
               <h2 className="display text-3xl sm:text-4xl" style={{ color: meta?.color }}>
                 {meta?.shortLabel}
