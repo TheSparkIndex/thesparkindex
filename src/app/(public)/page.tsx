@@ -55,6 +55,7 @@ export default async function HomePage() {
       )}
 
       <section className="container-key flex flex-col gap-8 py-10 sm:py-14">
+        {/* Intro de portada (oculta temporalmente, puede reincorporarse)
         <div className="flex items-center gap-3">
           <Zap className="size-5 text-key-orange" aria-hidden />
           <p className="display text-xl sm:text-2xl">
@@ -62,6 +63,7 @@ export default async function HomePage() {
             <span className="marker-lime">creando</span>, explicando y contando.
           </p>
         </div>
+        */}
 
         {hero && <ArticleHero article={hero} />}
       </section>
