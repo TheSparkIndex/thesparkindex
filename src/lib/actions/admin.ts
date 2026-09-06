@@ -457,6 +457,10 @@ export async function saveSettings(input: FormData): Promise<{ ok?: boolean; err
     bannerSubtitle: (input.get("bannerSubtitle") as string) || null,
     bannerArticleSlug: (input.get("bannerArticleSlug") as string) || null,
     bannerEnabled: input.get("bannerEnabled") === "on" || input.get("bannerEnabled") === "true",
+    bannerBgColor: (input.get("bannerBgColor") as string) || null,
+    bannerTextColor: (input.get("bannerTextColor") as string) || null,
+    bannerButtonBgColor: (input.get("bannerButtonBgColor") as string) || null,
+    bannerButtonTextColor: (input.get("bannerButtonTextColor") as string) || null,
   };
   try {
     settingsSchema.parse(raw);

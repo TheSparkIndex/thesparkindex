@@ -47,6 +47,10 @@ export default async function HomePage() {
           title={settings.bannerTitle}
           subtitle={settings.bannerSubtitle}
           articleSlug={settings.bannerArticleSlug}
+          backgroundColor={settings.bannerBgColor}
+          textColor={settings.bannerTextColor}
+          buttonBgColor={settings.bannerButtonBgColor}
+          buttonTextColor={settings.bannerButtonTextColor}
         />
       )}
 

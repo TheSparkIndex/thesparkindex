@@ -15,6 +15,10 @@ type Settings = {
   bannerSubtitle?: unknown;
   bannerArticleSlug?: unknown;
   bannerEnabled?: unknown;
+  bannerBgColor?: unknown;
+  bannerTextColor?: unknown;
+  bannerButtonBgColor?: unknown;
+  bannerButtonTextColor?: unknown;
 };
 
 function str(v: unknown): string {
@@ -68,6 +72,32 @@ export function SettingsForm({ settings }: { settings: Settings }) {
           <Field label="Título del banner" name="bannerTitle" defaultValue={str(settings.bannerTitle)} placeholder="Nuestra razón de ser" />
           <Field label="Subtítulo" name="bannerSubtitle" defaultValue={str(settings.bannerSubtitle)} placeholder="Una frase que acompañe el título" />
           <Field label="Slug del artículo" name="bannerArticleSlug" defaultValue={str(settings.bannerArticleSlug)} placeholder="nombre-del-articulo" hint="El slug del artículo al que enlaza el botón." />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Color de fondo del banner"
+              name="bannerBgColor"
+              type="color"
+              defaultValue={str(settings.bannerBgColor) || "#026DFD"}
+            />
+            <Field
+              label="Color del texto"
+              name="bannerTextColor"
+              type="color"
+              defaultValue={str(settings.bannerTextColor) || "#ffffff"}
+            />
+            <Field
+              label="Color del botón «Leer más»"
+              name="bannerButtonBgColor"
+              type="color"
+              defaultValue={str(settings.bannerButtonBgColor) || "#f5f500"}
+            />
+            <Field
+              label="Color de letra del botón"
+              name="bannerButtonTextColor"
+              type="color"
+              defaultValue={str(settings.bannerButtonTextColor) || "#16161a"}
+            />
+          </div>
         </div>
       </Card>
 

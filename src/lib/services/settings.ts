@@ -11,6 +11,10 @@ export type SiteSettings = {
   bannerSubtitle: string | null;
   bannerArticleSlug: string | null;
   bannerEnabled: boolean;
+  bannerBgColor: string | null;
+  bannerTextColor: string | null;
+  bannerButtonBgColor: string | null;
+  bannerButtonTextColor: string | null;
 };
 
 function str(v: unknown): string | null {
@@ -31,6 +35,10 @@ export async function getSettings(): Promise<SiteSettings> {
     bannerSubtitle: str(map.get("bannerSubtitle")),
     bannerArticleSlug: str(map.get("bannerArticleSlug")),
     bannerEnabled: map.get("bannerEnabled") === true || map.get("bannerEnabled") === "true",
+    bannerBgColor: str(map.get("bannerBgColor")),
+    bannerTextColor: str(map.get("bannerTextColor")),
+    bannerButtonBgColor: str(map.get("bannerButtonBgColor")),
+    bannerButtonTextColor: str(map.get("bannerButtonTextColor")),
   };
 }
 

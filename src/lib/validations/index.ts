@@ -96,4 +96,24 @@ export const settingsSchema = z.object({
   tiktok: z.string().max(200).nullable().optional(),
   twitter: z.string().max(200).nullable().optional(),
   description: z.string().max(300).optional(),
+  bannerBgColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/, "Debe ser un color hexadecimal (ej. #026DFD)")
+    .nullable()
+    .optional(),
+  bannerTextColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/, "Debe ser un color hexadecimal (ej. #ffffff)")
+    .nullable()
+    .optional(),
+  bannerButtonBgColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/, "Debe ser un color hexadecimal (ej. #f5f500)")
+    .nullable()
+    .optional(),
+  bannerButtonTextColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/, "Debe ser un color hexadecimal (ej. #16161a)")
+    .nullable()
+    .optional(),
 });
