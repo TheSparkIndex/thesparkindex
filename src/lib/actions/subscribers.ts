@@ -69,11 +69,24 @@ export async function getSubscriberStats() {
   return { total, active };
 }
 
-export async function listSubscribers() {
-  return db.subscriber.findMany({
-    orderBy: { createdAt: "desc" },
-    select: { id: true, email: true, name: true, isActive: true, createdAt: true },
-  });
+export async function listSubscribers(page = 1, perPage = 50) {
+  const safePage = Math.max(1, page);
+  const [items, total] = await Promise.all([
+    db.subscriber.findMany({
+      orderBy: { createdAt: "desc" },
+      skip: (safePage - 1) * perPage,
+      take: perPage,
+      select: { id: true, email: true, name: true, isActive: true, createdAt: true },
+    }),
+    db.subscriber.count(),
+  ]);
+  return {
+    items,
+    total,
+    page: safePage,
+    perPage,
+    pages: Math.max(1, Math.ceil(total / perPage)),
+  };
 }
 
 export async function exportSubscribersCSV(): Promise<string> {
