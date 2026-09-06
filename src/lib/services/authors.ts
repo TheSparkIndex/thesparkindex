@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import type { Prisma } from "@/generated/prisma/client";
+import { paginationArgs, paginationMeta } from "./pagination";
 
 export const authorInclude = {
   photo: true,
@@ -30,6 +31,23 @@ export async function adminListAuthors() {
     },
     orderBy: { name: "asc" },
   });
+}
+
+export async function adminListAuthorsPaginated(opts: { page?: number; perPage?: number } = {}) {
+  const { page, perPage } = paginationArgs(opts, 50);
+  const [items, total] = await Promise.all([
+    db.author.findMany({
+      include: {
+        photo: true,
+        _count: { select: { articles: true } },
+      },
+      orderBy: { name: "asc" },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    db.author.count(),
+  ]);
+  return { items, total, ...paginationMeta(total, page, perPage) };
 }
 
 export async function adminGetAuthor(id: string) {
