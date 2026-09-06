@@ -140,7 +140,7 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                       onClick={() => run(() => setArticleStatus(row.id, "draft"))}
                       title="Despublicar"
                       aria-label="Despublicar"
-                      className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-muted hover:bg-key-muted-soft hover:text-key-ink disabled:opacity-50"
+                      className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-muted hover:bg-key-primary-soft hover:text-key-ink disabled:opacity-50"
                     >
                       <ArrowDown className="size-4" />
                     </button>
@@ -153,7 +153,9 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                     aria-label={row.featured ? "Quitar destacado" : "Destacar"}
                     className={cn(
                       "grid size-7 place-items-center rounded-md transition-colors disabled:opacity-50",
-                      row.featured ? "bg-key-lime text-key-ink" : "bg-key-surface-alt text-key-muted hover:text-key-ink"
+                      row.featured
+                        ? "bg-key-lime text-key-ink"
+                        : "bg-key-surface-alt text-key-muted hover:bg-key-primary-soft hover:text-key-ink"
                     )}
                   >
                     <Star className="size-4" fill={row.featured ? "currentColor" : "none"} />
