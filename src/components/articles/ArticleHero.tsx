@@ -28,7 +28,7 @@ export function ArticleHero({ article }: { article: ArticleWithRelations }) {
         <div className="flex flex-col justify-center gap-5 bg-key-primary p-6 sm:p-10 lg:p-12">
           <SectionBadge sectionSlug={article.section?.slug} color={article.section?.color} className="self-start">{article.section?.name}</SectionBadge>
           <h1 className="display text-3xl text-white sm:text-4xl lg:text-5xl text-balance">
-            <Link href={`/articulos/${article.slug}`} className="hover:underline decoration-key-lime decoration-4 underline-offset-4">
+            <Link href={`/articulos/${article.slug}`} className="hover:underline decoration-white decoration-4 underline-offset-4">
               {article.title}
             </Link>
           </h1>
@@ -53,7 +53,7 @@ export function ArticleHero({ article }: { article: ArticleWithRelations }) {
           <div className="mt-2 flex items-center gap-3">
             <Link
               href={`/articulos/${article.slug}`}
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-key-lime px-7 text-base font-bold text-key-ink transition-all hover:gap-3 hover:brightness-95"
+              className="inline-flex h-12 items-center gap-2 rounded-full bg-key-white px-7 text-base font-bold text-key-ink transition-all hover:gap-3 hover:brightness-95"
             >
               Leer historia <ArrowRight className="size-4" aria-hidden />
             </Link>
