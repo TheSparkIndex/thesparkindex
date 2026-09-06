@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Download, Copy, Check } from "lucide-react";
-import { exportSubscribersCSV } from "@/lib/actions/subscribers";
-import { Card, StatusBadge } from "./ui";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Download, Copy, Check, Trash2 } from "lucide-react";
+import { deleteSubscriber, exportSubscribersCSV } from "@/lib/actions/subscribers";
+import { Card, ConfirmButton, StatusBadge } from "./ui";
 
 type SubscriberRow = {
   id: string;
@@ -18,7 +19,9 @@ function formatDate(d: Date) {
 }
 
 export function SubscribersManager({ subscribers }: { subscribers: SubscriberRow[] }) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const [, startTransition] = useTransition();
 
   async function handleDownload() {
     const csv = await exportSubscribersCSV();
@@ -66,19 +69,20 @@ export function SubscribersManager({ subscribers }: { subscribers: SubscriberRow
 
       <Card className="p-0">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full min-w-[680px] text-left">
             <thead>
               <tr className="border-b border-key-border text-xs font-black uppercase tracking-wide text-key-muted">
                 <th className="px-5 py-3">Email</th>
                 <th className="px-5 py-3">Nombre</th>
                 <th className="px-5 py-3">Estado</th>
                 <th className="px-5 py-3">Fecha</th>
+                <th className="px-5 py-3 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-key-border">
               {subscribers.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-5 py-10 text-center text-sm text-key-muted">
+                  <td colSpan={5} className="px-5 py-10 text-center text-sm text-key-muted">
                     Aún no hay suscriptores.
                   </td>
                 </tr>
@@ -91,6 +95,21 @@ export function SubscribersManager({ subscribers }: { subscribers: SubscriberRow
                     <StatusBadge active={s.isActive}>{s.isActive ? "Activo" : "Inactivo"}</StatusBadge>
                   </td>
                   <td className="px-5 py-3 text-xs text-key-muted">{formatDate(s.createdAt)}</td>
+                  <td className="px-5 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <ConfirmButton
+                        title="Eliminar"
+                        onConfirm={async () => {
+                          startTransition(async () => {
+                            await deleteSubscriber(s.id);
+                            router.refresh();
+                          });
+                        }}
+                      >
+                        <Trash2 className="size-4" />
+                      </ConfirmButton>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

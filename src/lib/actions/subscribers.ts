@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth/guard";
 
 const subscribeSchema = z.object({
   email: z.string().email("Correo inválido."),
@@ -59,6 +60,13 @@ export async function unsubscribeEmail(
   });
   revalidatePath("/");
   return { ok: true };
+}
+
+export async function deleteSubscriber(id: string): Promise<{ error?: string }> {
+  await requireAdmin();
+  await db.subscriber.delete({ where: { id } });
+  revalidatePath("/admin/suscriptores");
+  return {};
 }
 
 export async function getSubscriberStats() {
