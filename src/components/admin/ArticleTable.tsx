@@ -140,7 +140,7 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                       onClick={() => run(() => setArticleStatus(row.id, "draft"))}
                       title="Despublicar"
                       aria-label="Despublicar"
-                      className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-ink hover:bg-key-muted-soft disabled:opacity-50"
+                      className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-muted hover:bg-key-muted-soft disabled:opacity-50"
                     >
                       <ArrowDown className="size-4" />
                     </button>
@@ -160,7 +160,7 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                   </button>
                   <Link
                     href={`/admin/articulos/${row.id}`}
-                    className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-ink hover:bg-key-primary-soft"
+                    className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-muted hover:bg-key-primary-soft"
                     aria-label={`Editar ${row.title}`}
                   >
                     <Edit className="size-3.5" />
