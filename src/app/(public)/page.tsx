@@ -65,8 +65,7 @@ export default async function HomePage() {
       {latestOthers.length > 0 && (
         <section className="border-t-2 border-key-ink/80 bg-key-surface-alt/60 py-12 sm:py-16">
           <Container>
-            <div className="mb-8 flex items-center gap-3">
-              <span className="h-1 w-10 rounded-full bg-key-lime-dark" aria-hidden />
+            <div className="mb-8">
               <h2 className="display text-3xl sm:text-4xl">Últimas historias</h2>
             </div>
             <MagazineGrid articles={latestOthers} />
