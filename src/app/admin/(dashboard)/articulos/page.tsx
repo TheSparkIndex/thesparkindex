@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { adminListArticles } from "@/lib/services/articles";
 import { ArticleTable, type AdminArticleRow } from "@/components/admin/ArticleTable";
+import { Pagination } from "@/components/articles/Pagination";
 import { PageHeader, Card } from "@/components/admin/ui";
 import { ArticleStatus } from "@/generated/prisma/client";
 
@@ -21,8 +22,9 @@ export default async function AdminArticlesPage({
   const status = (Object.values(ArticleStatus) as string[]).includes(statusParam)
     ? (statusParam as ArticleStatus)
     : undefined;
+  const page = Math.max(1, Number(sp.page ?? 1) || 1);
 
-  const { items, total } = await adminListArticles({ status, perPage: 50 });
+  const { items, total, page: currentPage, pages } = await adminListArticles({ status, page, perPage: 50 });
 
   return (
     <div>
@@ -61,6 +63,14 @@ export default async function AdminArticlesPage({
       <Card className="p-0">
         <ArticleTable rows={items as unknown as AdminArticleRow[]} />
       </Card>
+
+      <Pagination
+        page={currentPage}
+        pages={pages}
+        baseHref="/admin/articulos"
+        query={status ? { status } : {}}
+        className="mt-6"
+      />
     </div>
   );
 }

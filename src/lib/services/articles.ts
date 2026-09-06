@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { Prisma, ArticleStatus } from "@/generated/prisma/client";
 import type { Article } from "@/generated/prisma/client";
+import { paginationArgs, paginationMeta } from "./pagination";
 
 export const articleInclude = {
   section: true,
@@ -22,17 +23,6 @@ export type ArticleWithRelations = Prisma.ArticleGetPayload<{
 
 const PUBLISHED = ArticleStatus.published;
 const SCHEDULED = ArticleStatus.scheduled;
-
-function paginationArgs(opts: { page?: number; perPage?: number }, defaultPerPage: number) {
-  return {
-    page: Math.max(1, opts.page ?? 1),
-    perPage: opts.perPage ?? defaultPerPage,
-  };
-}
-
-function paginationMeta(total: number, page: number, perPage: number) {
-  return { page, perPage, pages: Math.max(1, Math.ceil(total / perPage)) };
-}
 
 /** Promote scheduled articles whose time has come. Safe to call on any request. */
 export async function publishDueArticles(): Promise<void> {
