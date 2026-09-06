@@ -33,7 +33,7 @@ export function NewsletterSubscribe({ compact }: { compact?: boolean }) {
           <button
             type="submit"
             disabled={pending}
-            className="shrink-0 rounded-lg bg-key-lime px-4 py-2 text-sm font-bold text-key-ink hover:brightness-95 disabled:opacity-60"
+            className="shrink-0 rounded-lg bg-key-primary px-4 py-2 text-sm font-bold text-white hover:brightness-95 disabled:opacity-60"
           >
             {pending ? "…" : "Suscribir"}
           </button>
@@ -64,7 +64,7 @@ export function NewsletterSubscribe({ compact }: { compact?: boolean }) {
     <section className="bg-key-ink py-12 text-white">
       <div className="container-key flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-full bg-key-lime text-key-ink">
+          <span className="grid size-10 place-items-center rounded-full bg-key-primary text-white">
             <Mail className="size-5" />
           </span>
           <div>
@@ -84,7 +84,7 @@ export function NewsletterSubscribe({ compact }: { compact?: boolean }) {
             <button
               type="submit"
               disabled={pending}
-              className="shrink-0 rounded-lg bg-key-lime px-6 py-2.5 text-sm font-bold text-key-ink hover:brightness-95 disabled:opacity-60"
+              className="shrink-0 rounded-lg bg-key-primary px-6 py-2.5 text-sm font-bold text-white hover:brightness-95 disabled:opacity-60"
             >
               {pending ? "Enviando…" : "Suscribirme"}
             </button>

@@ -102,7 +102,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/buscar"
-            className="inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-key-lime px-7 text-base font-bold text-key-ink transition-all hover:gap-3 hover:brightness-95"
+            className="inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-key-primary px-7 text-base font-bold text-white transition-all hover:gap-3 hover:brightness-95"
           >
             Explora la revista <Zap className="size-4" aria-hidden />
           </Link>
