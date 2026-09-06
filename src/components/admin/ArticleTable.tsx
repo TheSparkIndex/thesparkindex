@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Edit, Star } from "lucide-react";
+import { Edit, Star, ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { deleteArticle, setArticleStatus, toggleFeature } from "@/lib/actions/admin";
 import { cn } from "@/lib/utils";
 import { ConfirmButton } from "./ui";
@@ -127,30 +127,36 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                       type="button"
                       disabled={pending}
                       onClick={() => run(() => setArticleStatus(row.id, "published"))}
-                      className="rounded-md bg-key-primary px-2.5 py-1 text-xs font-bold text-white hover:bg-key-primary-dark disabled:opacity-50"
+                      title="Publicar"
+                      aria-label="Publicar"
+                      className="grid size-7 place-items-center rounded-md bg-key-primary text-white hover:bg-key-primary-dark disabled:opacity-50"
                     >
-                      Publicar
+                      <ArrowUp className="size-4" />
                     </button>
                   ) : row.status === "published" ? (
                     <button
                       type="button"
                       disabled={pending}
                       onClick={() => run(() => setArticleStatus(row.id, "draft"))}
-                      className="rounded-md bg-key-surface-alt px-2.5 py-1 text-xs font-bold text-key-ink hover:bg-key-muted-soft disabled:opacity-50"
+                      title="Despublicar"
+                      aria-label="Despublicar"
+                      className="grid size-7 place-items-center rounded-md bg-key-surface-alt text-key-ink hover:bg-key-muted-soft disabled:opacity-50"
                     >
-                      Despublicar
+                      <ArrowDown className="size-4" />
                     </button>
                   ) : null}
                   <button
                     type="button"
                     disabled={pending}
                     onClick={() => run(() => toggleFeature(row.id, !row.featured))}
+                    title={row.featured ? "Quitar destacado" : "Destacar"}
+                    aria-label={row.featured ? "Quitar destacado" : "Destacar"}
                     className={cn(
-                      "rounded-md px-2.5 py-1 text-xs font-bold transition-colors disabled:opacity-50",
+                      "grid size-7 place-items-center rounded-md transition-colors disabled:opacity-50",
                       row.featured ? "bg-key-lime text-key-ink" : "bg-key-surface-alt text-key-muted hover:text-key-ink"
                     )}
                   >
-                    {row.featured ? "Quitar destacado" : "Destacar"}
+                    <Star className="size-4" fill={row.featured ? "currentColor" : "none"} />
                   </button>
                   <Link
                     href={`/admin/articulos/${row.id}`}
@@ -160,12 +166,13 @@ export function ArticleTable({ rows, showSection = true }: { rows: AdminArticleR
                     <Edit className="size-3.5" />
                   </Link>
                   <ConfirmButton
+                    title="Eliminar"
                     onConfirm={async () => {
                       await deleteArticle(row.id);
                       router.refresh();
                     }}
                   >
-                    Eliminar
+                    <Trash2 className="size-4" />
                   </ConfirmButton>
                 </div>
               </td>

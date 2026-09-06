@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Save, ImagePlus } from "lucide-react";
+import { Plus, Save, ImagePlus, Trash2 } from "lucide-react";
 import { saveSection, deleteSection } from "@/lib/actions/admin";
-import { slugify } from "@/lib/utils";
+import { slugify, cn } from "@/lib/utils";
 import { useMediaPicker } from "./MediaPicker";
 import { ErrorBox } from "./ui";
 
@@ -135,9 +135,14 @@ function SectionEditor({ section, onSaved }: { section: SectionRow; onSaved: () 
                   else { onSaved(); router.refresh(); }
                 });
               }}
-              className="text-xs font-bold text-key-muted transition-colors hover:text-key-orange"
+              title={confirmDelete ? "¿Confirmar eliminación?" : "Eliminar"}
+              aria-label={confirmDelete ? "¿Confirmar eliminación?" : "Eliminar"}
+              className={cn(
+                "grid size-7 place-items-center rounded-md transition-colors",
+                confirmDelete ? "bg-key-orange text-key-white" : "text-key-muted hover:text-key-orange"
+              )}
             >
-              {confirmDelete ? "¿Seguro?" : "Eliminar"}
+              <Trash2 className="size-4" />
             </button>
           )}
         </div>

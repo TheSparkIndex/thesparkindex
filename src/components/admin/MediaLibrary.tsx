@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Search, UploadCloud, X, Check } from "lucide-react";
+import { Search, UploadCloud, X, Check, Trash2 } from "lucide-react";
 import { deleteMedia, updateMediaMeta } from "@/lib/actions/admin";
 import { useMediaLibrary } from "./useMediaLibrary";
 import { ConfirmButton } from "./ui";
@@ -186,7 +186,7 @@ export function MediaLibrary({ initial }: { initial: MediaRow[] }) {
                   Editar metadatos
                 </button>
                 <ConfirmButton
-                  className="py-2 text-sm"
+                  title="Eliminar archivo"
                   onConfirm={async () => {
                     const res = await deleteMedia(selected.id);
                     if (res?.error) {
@@ -198,7 +198,7 @@ export function MediaLibrary({ initial }: { initial: MediaRow[] }) {
                     await load(q);
                   }}
                 >
-                  Eliminar archivo
+                  <Trash2 className="size-4" />
                 </ConfirmButton>
               </div>
             )}

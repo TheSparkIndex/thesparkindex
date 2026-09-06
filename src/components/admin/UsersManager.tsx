@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, ShieldAlert, Save } from "lucide-react";
+import { Plus, ShieldAlert, Save, Trash2 } from "lucide-react";
 import { deleteUser, saveUser } from "@/lib/actions/admin";
 import { Checkbox, ConfirmButton, ErrorBox, StatusBadge } from "./ui";
 
@@ -179,6 +179,7 @@ export function UsersManager({ users, currentUserId }: { users: UserRow[]; curre
                       Editar
                     </button>
                     <ConfirmButton
+                      title="Eliminar"
                       onConfirm={async () => {
                         const res = await deleteUser(u.id);
                         if (res?.error) {
@@ -188,7 +189,7 @@ export function UsersManager({ users, currentUserId }: { users: UserRow[]; curre
                         router.refresh();
                       }}
                     >
-                      Eliminar
+                      <Trash2 className="size-4" />
                     </ConfirmButton>
                     <span className="text-xs text-key-muted">{u.createdAt.toLocaleDateString("es-SV")}</span>
                   </div>

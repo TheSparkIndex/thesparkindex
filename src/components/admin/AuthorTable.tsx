@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { deleteAuthor } from "@/lib/actions/admin";
 import { Avatar } from "@/components/ui/Avatar";
 import { ConfirmButton, StatusBadge } from "./ui";
@@ -80,6 +80,7 @@ export function AuthorTable({ rows }: { rows: AdminAuthorRow[] }) {
                     <Edit className="size-3.5" />
                   </Link>
                   <ConfirmButton
+                    title="Eliminar"
                     onConfirm={async () => {
                       startTransition(async () => {
                         await deleteAuthor(row.id);
@@ -87,7 +88,7 @@ export function AuthorTable({ rows }: { rows: AdminAuthorRow[] }) {
                       });
                     }}
                   >
-                    Eliminar
+                    <Trash2 className="size-4" />
                   </ConfirmButton>
                 </div>
               </td>

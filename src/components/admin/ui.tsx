@@ -240,15 +240,18 @@ export function ConfirmButton({
   onConfirm,
   children,
   className,
+  title,
 }: {
   onConfirm: () => Promise<{ error?: string } | void>;
   children: React.ReactNode;
   className?: string;
+  title?: string;
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const iconMode = title != null;
 
   return (
     <span className="inline-flex flex-col items-start gap-1">
@@ -268,15 +271,21 @@ export function ConfirmButton({
             if (result && "error" in result && result.error) setError(result.error);
           });
         }}
+        title={iconMode ? (confirming ? "¿Confirmar eliminación?" : title) : undefined}
+        aria-label={iconMode ? (confirming ? "¿Confirmar eliminación?" : title) : undefined}
         className={cn(
-          "rounded-md px-2 py-1 text-xs font-bold underline-offset-2 transition-colors",
+          iconMode
+            ? "grid size-7 place-items-center rounded-md disabled:opacity-50"
+            : "rounded-md px-2 py-1 text-xs font-bold underline-offset-2",
           confirming ? "bg-key-orange text-key-white" : "text-key-muted hover:text-key-orange",
           className
         )}
       >
-        {pending ? "Eliminando…" : confirming ? "¿Seguro?" : children}
+        {iconMode ? children : pending ? "Eliminando…" : confirming ? "¿Seguro?" : children}
       </button>
-      {error ? <span className="text-xs text-key-orange">{error}</span> : null}
+      {error ? (
+        <span className={cn("text-xs text-key-orange", iconMode && "whitespace-nowrap")}>{error}</span>
+      ) : null}
     </span>
   );
 }
