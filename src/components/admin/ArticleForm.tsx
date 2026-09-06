@@ -129,7 +129,7 @@ export function ArticleForm({
 
           <div className="mt-4">
             <label className="block">
-              <span className="mb-1.5 block text-sm font-bold text-key-ink">Bajada</span>
+              <span className="mb-1.5 block text-sm font-bold text-key-ink">Subtítulo</span>
               <input
                 name="subtitle"
                 defaultValue={article?.subtitle ?? ""}
