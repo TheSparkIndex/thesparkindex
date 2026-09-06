@@ -12,14 +12,15 @@ export function ArticleHero({ article }: { article: ArticleWithRelations }) {
   const author = primaryAuthor(article);
 
   return (
-    <section className="relative overflow-hidden bg-key-ink text-white">
+    <section className="relative overflow-hidden rounded-card bg-key-ink text-white shadow-card">
       <div className="absolute inset-0 bg-dotgrid-ink opacity-40" aria-hidden />
-      <div className="container-key relative grid gap-0 md:grid-cols-[1.3fr_1fr]">
-        <div className="relative">
+      <div className="relative grid gap-0 md:grid-cols-[1.3fr_1fr]">
+        <div className="relative md:h-full">
           <ImageWithCaption
+            className="md:h-full"
             src={img}
             alt={article.heroMedia?.altText ?? article.title}
-            aspect="aspect-[16/10] md:aspect-[16/11] md:h-full"
+            aspect="aspect-[16/10] md:aspect-auto md:h-full"
             priority
           />
         </div>
