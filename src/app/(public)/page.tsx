@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Zap } from "lucide-react";
+// import Link from "next/link";
+// import { Zap } from "lucide-react";
 import {
   getFeaturedArticle,
   getLatestArticles,
@@ -93,6 +93,7 @@ export default async function HomePage() {
 
       <NewsletterSubscribe />
 
+      {/* Banner de historias recién salidas del laboratorio (oculto temporalmente, puede reincorporarse)
       <section className="relative overflow-hidden bg-key-ink py-16 text-white">
         <div className="bg-dotgrid-ink absolute inset-0 opacity-40" aria-hidden />
         <Container className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -113,6 +114,7 @@ export default async function HomePage() {
           </Link>
         </Container>
       </section>
+      */}
     </>
   );
 }
