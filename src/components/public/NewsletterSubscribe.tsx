@@ -49,8 +49,9 @@ export function NewsletterSubscribe({ compact }: { compact?: boolean }) {
 
   if (state?.ok) {
     return (
-      <section className="bg-key-ink py-12 text-white">
-        <div className="container-key flex items-center justify-center">
+      <section className="relative overflow-hidden bg-key-ink py-12 text-white">
+        <div className="bg-dotgrid-ink absolute inset-0 opacity-40" aria-hidden />
+        <div className="container-key relative flex items-center justify-center">
           <div className="flex items-center gap-2 text-sm font-semibold text-green-400">
             <CheckCircle2 className="size-5 shrink-0" />
             ¡Gracias por suscribirte!
@@ -61,8 +62,9 @@ export function NewsletterSubscribe({ compact }: { compact?: boolean }) {
   }
 
   return (
-    <section className="bg-key-ink py-12 text-white">
-      <div className="container-key flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <section className="relative overflow-hidden bg-key-ink py-12 text-white">
+      <div className="bg-dotgrid-ink absolute inset-0 opacity-40" aria-hidden />
+      <div className="container-key relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-full bg-key-primary text-white">
             <Mail className="size-5" />
