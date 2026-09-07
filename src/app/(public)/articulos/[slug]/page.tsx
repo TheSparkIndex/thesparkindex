@@ -161,16 +161,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </figure>
         )}
 
-        {article.section?.slug === "opinion" && (
-          <aside className="mt-8 flex items-start gap-3 rounded-card border border-key-orange/40 bg-key-orange/10 p-4 text-sm leading-6 text-key-ink">
-            <Info className="mt-0.5 size-4 shrink-0 text-key-orange" aria-hidden />
-            <p>
-              Las opiniones expresadas pertenecen a su autor y no representan
-              necesariamente la posición oficial de Key Institute.
-            </p>
-          </aside>
-        )}
-
         <div className="mt-10">
           <ArticleBody content={article.content} />
         </div>
@@ -181,6 +171,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </p>
           <ShareButtons slug={article.slug} title={article.title} />
         </div>
+
+        {article.section?.slug === "opinion" && (
+          <aside className="mt-8 flex items-start gap-3 rounded-card border border-key-orange/40 bg-key-orange/10 p-4 text-sm leading-6 text-key-ink">
+            <Info className="mt-0.5 size-4 shrink-0 text-key-orange" aria-hidden />
+            <p>
+              Las opiniones expresadas pertenecen a su autor y no representan
+              necesariamente la posición oficial de Key Institute.
+            </p>
+          </aside>
+        )}
       </article>
 
       <div className="container-key pb-16">
