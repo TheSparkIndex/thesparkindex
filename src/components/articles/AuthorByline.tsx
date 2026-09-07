@@ -44,7 +44,7 @@ export function AuthorByline({
         {rows.map((row) => {
           const label = ROLE_LABEL[row.role];
           return (
-            <div key={row.authorId} className="flex items-center gap-2">
+            <div key={row.authorId} className="flex flex-col items-start gap-1">
               {label && <span className="kicker text-key-muted">{label}</span>}
               <PersonLink author={row.author} />
             </div>
