@@ -41,7 +41,7 @@ export default async function AdminDashboardPage() {
     { label: "Borradores", value: stats.drafts, icon: DraftingCompass, href: "/admin/articulos?status=draft", tone: "bg-key-muted" },
     { label: "Programados", value: stats.scheduled, icon: CalendarClock, href: "/admin/articulos?status=scheduled", tone: "bg-key-orange" },
     { label: "Autores", value: stats.authors, icon: Users, href: "/admin/autores", tone: "bg-key-ink" },
-    { label: "Archivos media", value: stats.mediaCount, icon: Images, href: "/admin/media", tone: "bg-key-lime" },
+    { label: "Archivos media", value: stats.mediaCount, icon: Images, href: "/admin/media", tone: "bg-key-lime text-key-ink" },
     { label: "Destacados", value: stats.featured, icon: Star, href: "/admin/articulos?featured=1", tone: "bg-key-lime text-key-ink" },
     { label: "Visitas hoy", value: visitors.today, icon: Eye, href: "#", tone: "bg-key-primary" },
     { label: "Visitas (7d)", value: visitors.thisWeek, icon: Eye, href: "#", tone: "bg-key-primary" },
