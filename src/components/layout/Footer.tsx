@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { FooterSubscribe } from "./FooterSubscribe";
 import type { SectionMeta } from "@/lib/site";
 import { Container } from "@/components/ui/Container";
-import { NewsletterSubscribe } from "@/components/public/NewsletterSubscribe";
 
 export function Footer({ sections }: { sections: SectionMeta[] }) {
   return (
@@ -62,9 +62,7 @@ export function Footer({ sections }: { sections: SectionMeta[] }) {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-white/15 pt-8">
-          <NewsletterSubscribe compact />
-        </div>
+        <FooterSubscribe />
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/15 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Key Institute · KEY — The Spark Index</p>
