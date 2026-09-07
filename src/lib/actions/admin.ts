@@ -461,6 +461,7 @@ export async function saveSettings(input: FormData): Promise<{ ok?: boolean; err
     bannerTextColor: (input.get("bannerTextColor") as string) || null,
     bannerButtonBgColor: (input.get("bannerButtonBgColor") as string) || null,
     bannerButtonTextColor: (input.get("bannerButtonTextColor") as string) || null,
+    footerCopyright: (input.get("footerCopyright") as string) || null,
   };
   try {
     settingsSchema.parse(raw);

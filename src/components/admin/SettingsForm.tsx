@@ -19,6 +19,7 @@ type Settings = {
   bannerTextColor?: unknown;
   bannerButtonBgColor?: unknown;
   bannerButtonTextColor?: unknown;
+  footerCopyright?: unknown;
 };
 
 function str(v: unknown): string {
@@ -43,6 +44,13 @@ export function SettingsForm({ settings }: { settings: Settings }) {
             name="description"
             defaultValue={str(settings.description)}
             placeholder="La revista estudiantil que enciende la curiosidad…"
+          />
+          <Field
+            label="Línea de copyright del footer"
+            name="footerCopyright"
+            defaultValue={str(settings.footerCopyright)}
+            placeholder={`© ${new Date().getFullYear()} Key Institute · KEY — The Spark Index`}
+            hint="Línea completa que se muestra al pie del sitio."
           />
         </div>
       </Card>

@@ -116,4 +116,5 @@ export const settingsSchema = z.object({
     .regex(/^#[0-9a-fA-F]{6}$/, "Debe ser un color hexadecimal (ej. #16161a)")
     .nullable()
     .optional(),
+  footerCopyright: z.string().max(200).nullable().optional(),
 });

@@ -4,7 +4,7 @@ import { FooterSubscribe } from "./FooterSubscribe";
 import type { SectionMeta } from "@/lib/site";
 import { Container } from "@/components/ui/Container";
 
-export function Footer({ sections }: { sections: SectionMeta[] }) {
+export function Footer({ sections, copyright }: { sections: SectionMeta[]; copyright?: string | null }) {
   return (
     <footer className="mt-auto border-t-2 border-key-ink bg-key-ink text-key-white">
       <Container className="py-12">
@@ -65,7 +65,7 @@ export function Footer({ sections }: { sections: SectionMeta[] }) {
         <FooterSubscribe />
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/15 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Key Institute · KEY — The Spark Index</p>
+          <p>{copyright || `© ${new Date().getFullYear()} Key Institute · KEY — The Spark Index`}</p>
         </div>
       </Container>
     </footer>

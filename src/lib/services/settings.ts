@@ -15,6 +15,7 @@ export type SiteSettings = {
   bannerTextColor: string | null;
   bannerButtonBgColor: string | null;
   bannerButtonTextColor: string | null;
+  footerCopyright: string | null;
 };
 
 function str(v: unknown): string | null {
@@ -39,6 +40,7 @@ export async function getSettings(): Promise<SiteSettings> {
     bannerTextColor: str(map.get("bannerTextColor")),
     bannerButtonBgColor: str(map.get("bannerButtonBgColor")),
     bannerButtonTextColor: str(map.get("bannerButtonTextColor")),
+    footerCopyright: str(map.get("footerCopyright")),
   };
 }
 
