@@ -173,8 +173,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
 
         {article.section?.slug === "opinion" && (
-          <aside className="mt-8 flex items-start gap-3 rounded-card border border-key-orange/40 bg-key-orange/10 p-4 text-sm leading-6 text-key-ink">
-            <Info className="mt-0.5 size-4 shrink-0 text-key-orange" aria-hidden />
+          <aside className="mt-8 flex items-center gap-3 rounded-card border border-key-border bg-key-surface-alt p-4 text-sm leading-6 text-key-ink">
+            <Info className="size-4 shrink-0 text-key-ink" aria-hidden />
             <p>
               Las opiniones expresadas pertenecen a su autor y no representan
               necesariamente la posición oficial de Key Institute.
