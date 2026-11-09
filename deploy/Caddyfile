@@ -1,0 +1,15 @@
+# SITE_ADDRESS viene de deploy/.env:
+#   ":80"                         → solo HTTP por IP (antes de tener dominio)
+#   "revista.ejemplo.com"         → HTTPS automático con Let's Encrypt
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	reverse_proxy app:3000
+}

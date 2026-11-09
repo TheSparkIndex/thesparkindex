@@ -18,6 +18,9 @@ const db = new PrismaClient({ adapter });
 
 const UPLOADS = path.join(process.cwd(), process.env.STORAGE_DIR ?? "storage/uploads");
 
+// SEED_DEMO=false → solo secciones, admin y configuración (sin autores ni artículos de ejemplo).
+const SEED_DEMO = process.env.SEED_DEMO !== "false";
+
 const p = (text: string): TipNode => ({ type: "paragraph", content: [{ type: "text", text }] });
 
 const rich = (parts: Array<{ t: string; b?: boolean; i?: boolean; u?: boolean; link?: string }>): TipNode => ({
@@ -117,7 +120,7 @@ async function main() {
   }
   console.log(`✓ ${sections.length} secciones`);
 
-  const authors = [
+  const authors = !SEED_DEMO ? [] : [
     { name: "Valeria Menjívar", slug: "valeria-menjivar", role: "Editora jefa", program: "Ingeniería en Software", bio: "Editora jefa de KEY y estudiante de Ingeniería en Software. Le gusta el café, los sistemas distribuidos y contar historias de gente real." },
     { name: "Diego Alas", slug: "diego-alas", role: "Redactor de noticias", program: "Ingeniería en Sistemas", bio: "Cubre la actualidad del campus y las noticias de la comunidad Key." },
     { name: "Camila Rodríguez", slug: "camila-rodriguez", role: "Columnista", program: "Diseño UX", bio: "Escribe sobre tecnología, diseño y cultura digital." },
@@ -142,7 +145,7 @@ async function main() {
   const now = new Date();
   const daysAgo = (n: number) => new Date(now.getTime() - n * 24 * 60 * 60 * 1000);
 
-  const articles = [
+  const articles = !SEED_DEMO ? [] : [
     {
       slug: "primer-hackathon-ia-salud",
       title: "Key lanza su primer hackathon de IA aplicada a la salud",

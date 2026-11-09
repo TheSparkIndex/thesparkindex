@@ -1,0 +1,14 @@
+.git
+.github
+.claude
+.next
+node_modules
+src/generated
+storage
+deploy
+.env*
+!.env.example
+*.log
+Dockerfile
+.dockerignore
+README.md
