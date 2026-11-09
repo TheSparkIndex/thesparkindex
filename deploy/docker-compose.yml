@@ -51,6 +51,8 @@ services:
       network: host
       args:
         DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:${DB_HOST_PORT:-5432}/${POSTGRES_DB}?schema=public
+        SITE_URL: ${SITE_URL}
+        SITE_NAME: ${SITE_NAME}
     image: thesparkindex-app
     restart: unless-stopped
     depends_on:

@@ -40,7 +40,7 @@ sudo netfilter-persistent save
 ## Primer despliegue
 
 ```bash
-git clone https://github.com/eliasventurv/thesparkindex.git ~/thesparkindex
+git clone https://github.com/TheSparkIndex/thesparkindex.git ~/thesparkindex
 cd ~/thesparkindex
 git checkout deploy-oracle        # rama con los archivos de despliegue
 cp deploy/env.example deploy/.env

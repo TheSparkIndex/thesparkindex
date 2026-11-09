@@ -32,6 +32,9 @@ CMD ["npx", "prisma", "migrate", "deploy"]
 # una DATABASE_URL alcanzable durante el build (ver deploy/docker-compose.yml).
 FROM source AS builder
 ARG DATABASE_URL
+# robots.txt y otras rutas estáticas se generan en el build con la URL pública.
+ARG SITE_URL
+ARG SITE_NAME
 ENV NODE_ENV=production
 RUN npm run build
 
