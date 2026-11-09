@@ -42,7 +42,7 @@ sudo netfilter-persistent save
 ```bash
 git clone https://github.com/eliasventurv/thesparkindex.git ~/thesparkindex
 cd ~/thesparkindex
-git checkout Detalles2            # o la rama que se vaya a publicar
+git checkout deploy-oracle        # rama con los archivos de despliegue
 cp deploy/env.example deploy/.env
 nano deploy/.env                  # llenar secretos (ver abajo)
 ./deploy/deploy.sh
