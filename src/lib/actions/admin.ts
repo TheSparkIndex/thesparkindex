@@ -5,7 +5,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth/guard";
 import { DEFAULT_SECTIONS } from "@/lib/site";
-import { ArticleStatus, ContributorRole, type Prisma, type UserRole } from "@/generated/prisma/client";
+import { ArticleStatus, ContributorRole, type UserRole } from "@/generated/prisma/client";
 import {
   articleSchema,
   authorSchema,
@@ -14,8 +14,7 @@ import {
   userSchema,
   settingsSchema,
 } from "@/lib/validations";
-import { sanitizeContent } from "@/lib/content/sanitize";
-import { slugify } from "@/lib/utils";
+import { persistArticle, persistAuthor } from "@/lib/services/content-writer";
 import { storage } from "@/lib/storage";
 
 async function revalidateAll() {
@@ -24,26 +23,6 @@ async function revalidateAll() {
   const sections = await db.section.findMany({ select: { slug: true } });
   const slugs = sections.length > 0 ? sections.map((s) => s.slug) : DEFAULT_SECTIONS.map((s) => s.slug);
   for (const slug of slugs) revalidatePath(`/${slug}`);
-}
-
-function toSlug(input: string): string {
-  const candidate = slugify(input);
-  return candidate || `articulo-${Date.now()}`;
-}
-
-async function upsertTags(names: string[]): Promise<{ id: string; name: string; slug: string }[]> {
-  const unique = [...new Set(names.map((n) => n.trim()).filter(Boolean))].slice(0, 10);
-  const tags: { id: string; name: string; slug: string }[] = [];
-  for (const name of unique) {
-    const slug = slugify(name) || `tag-${Date.now()}`;
-    const tag = await db.tag.upsert({
-      where: { slug },
-      update: { name },
-      create: { name, slug },
-    });
-    tags.push(tag);
-  }
-  return tags;
 }
 
 function validatePublishInput(article: {
@@ -96,109 +75,7 @@ export async function saveArticle(input: FormData): Promise<ArticleActionState> 
     return { error: "Datos inválidos." };
   }
 
-  const slug = parsed.slug || toSlug(parsed.title ?? "");
-  const content = sanitizeContent(parsed.content) as Prisma.InputJsonValue;
-  const tags = await upsertTags(parsed.tags ?? []);
-  const isScheduled = parsed.status === "scheduled";
-  const isPublished = parsed.status === "published";
-
-  if (isScheduled && !parsed.scheduledAt) {
-    return { error: "Si programas un artículo debes indicar la fecha de publicación." };
-  }
-  if (isScheduled && parsed.scheduledAt && parsed.scheduledAt <= new Date()) {
-    return { error: "La fecha de programación debe ser futura." };
-  }
-  if (isPublished || (parsed.status === "scheduled" && !parsed.scheduledAt)) {
-    const problems = validatePublishInput({
-      title: parsed.title,
-      slug,
-      sectionId: parsed.sectionId,
-      contributors: parsed.contributors as Array<{ authorId: string; role: ContributorRole }>,
-      content,
-      heroMediaId: parsed.heroMediaId,
-    });
-    if (problems.length) {
-      return { error: problems.join(" · ") };
-    }
-  }
-
-  const publishNow = isPublished || (isScheduled && parsed.scheduledAt && parsed.scheduledAt <= new Date());
-  const effectiveScheduledAt = isScheduled && parsed.scheduledAt && parsed.scheduledAt > new Date() ? parsed.scheduledAt : null;
-
-  try {
-    const existing = await db.article.findUnique({ where: { slug } });
-    const data = {
-      title: parsed.title!,
-      slug,
-      subtitle: parsed.subtitle ?? null,
-      excerpt: parsed.excerpt ?? null,
-      content,
-      sectionId: parsed.sectionId ?? null,
-      heroMediaId: parsed.heroMediaId ?? null,
-      imageCaption: parsed.imageCaption ?? null,
-      featured: parsed.featured ?? false,
-      seoTitle: parsed.seoTitle ?? null,
-      seoDescription: parsed.seoDescription ?? null,
-    };
-
-    if (existing) {
-      await db.article.update({
-        where: { id: existing.id },
-        data: {
-          ...data,
-          status: publishNow
-            ? ArticleStatus.published
-            : parsed.status === "scheduled"
-              ? ArticleStatus.scheduled
-              : (parsed.status as ArticleStatus),
-          scheduledAt: effectiveScheduledAt,
-          publishedAt: publishNow ? (existing.publishedAt ?? new Date()) : existing.publishedAt,
-          featuredAt: parsed.featured ? (existing.featuredAt ?? new Date()) : existing.featuredAt,
-          tags: { set: [], connect: tags.map((t) => ({ id: t.id })) },
-          authors: { deleteMany: {} },
-        },
-      });
-      await setContributors(existing.id, parsed.contributors ?? []);
-      revalidateAll();
-      return { ok: true, articleId: existing.id };
-    }
-
-    const article = await db.article.create({
-      data: {
-        ...data,
-        status: publishNow
-          ? ArticleStatus.published
-          : parsed.status === "scheduled"
-            ? ArticleStatus.scheduled
-            : ArticleStatus.draft,
-        scheduledAt: effectiveScheduledAt,
-        publishedAt: publishNow ? new Date() : null,
-        featuredAt: parsed.featured ? new Date() : null,
-        tags: { connect: tags.map((t) => ({ id: t.id })) },
-      },
-    });
-    await setContributors(article.id, parsed.contributors ?? []);
-    revalidateAll();
-    return { ok: true, articleId: article.id };
-  } catch {
-    return { error: "No se pudo guardar el artículo. Revisa que el slug no esté repetido." };
-  }
-}
-
-async function setContributors(
-  articleId: string,
-  contributors: Array<{ authorId: string; role: ContributorRole }>
-) {
-  const unique = new Map<string, ContributorRole>();
-  for (const c of contributors.slice(0, 12)) {
-    if (!unique.has(c.authorId)) unique.set(c.authorId, c.role);
-  }
-  let order = 0;
-  for (const [authorId, role] of unique) {
-    await db.articleAuthor.create({
-      data: { articleId, authorId, role, sortOrder: order++ },
-    });
-  }
+  return persistArticle(parsed);
 }
 
 export async function deleteArticle(id: string): Promise<{ error?: string }> {
@@ -276,27 +153,7 @@ export async function saveAuthor(input: FormData): Promise<{ ok?: boolean; error
     return { error: "Datos inválidos." };
   }
 
-  const slug = parsed.slug || toSlug(parsed.name);
-  const existing = await db.author.findUnique({ where: { slug } });
-  const socialLinks = (parsed.socialLinks ?? null) as Prisma.InputJsonValue;
-
-  try {
-    if (existing) {
-      await db.author.update({
-        where: { id: existing.id },
-        data: { ...parsed, socialLinks, slug, photoId: parsed.photoId ?? null },
-      });
-      revalidatePath("/autores");
-      return { ok: true, authorId: existing.id };
-    }
-    const author = await db.author.create({
-      data: { ...parsed, socialLinks, slug, photoId: parsed.photoId ?? null },
-    });
-    revalidatePath("/autores");
-    return { ok: true, authorId: author.id };
-  } catch {
-    return { error: "No se pudo guardar el autor. Revisa el slug." };
-  }
+  return persistAuthor(parsed);
 }
 
 export async function deleteAuthor(id: string): Promise<{ error?: string }> {

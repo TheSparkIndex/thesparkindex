@@ -6,6 +6,7 @@ node_modules
 src/generated
 storage
 deploy
+mcp
 .env*
 !.env.example
 *.log

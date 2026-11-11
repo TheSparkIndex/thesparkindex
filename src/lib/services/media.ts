@@ -1,4 +1,5 @@
 import { createId } from "@/lib/id";
+import { db } from "@/lib/db";
 import { storage } from "@/lib/storage";
 import sharp from "sharp";
 
@@ -48,6 +49,31 @@ function extFor(mime: string): string {
     "image/svg+xml": "svg",
   };
   return map[mime] ?? "bin";
+}
+
+/** Valida, procesa (variantes con sharp) y registra en la base una imagen subida. */
+export async function storeUploadedImage(
+  buffer: Buffer,
+  mimeType: string,
+  filename: string,
+  meta: { altText?: string | null; caption?: string | null; credit?: string | null } = {}
+) {
+  validateUpload(buffer, mimeType);
+  const generated = await processImage(buffer, mimeType);
+  return db.media.create({
+    data: {
+      filename,
+      url: generated.originalUrl,
+      mimeType,
+      size: buffer.byteLength,
+      width: generated.width || null,
+      height: generated.height || null,
+      variants: generated.variants,
+      altText: meta.altText ?? null,
+      caption: meta.caption ?? null,
+      credit: meta.credit ?? null,
+    },
+  });
 }
 
 export async function processImage(

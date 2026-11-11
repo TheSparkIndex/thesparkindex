@@ -1,0 +1,21 @@
+{
+  "name": "thesparkindex-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Servidor MCP para publicar artículos en KEY — The Spark Index mediante su API de contenido.",
+  "type": "module",
+  "bin": {
+    "thesparkindex-mcp": "server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "yaml": "^2.9.1",
+    "zod": "^4.4.3"
+  }
+}

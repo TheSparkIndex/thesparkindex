@@ -83,6 +83,18 @@ El sitio queda en `http://IP_DEL_SERVIDOR`. Admin en `/admin/login` con `ADMIN_E
 4. Cuando cargue con HTTPS, en Cloudflare cambiar a **Proxied** (nube naranja) y en
    *SSL/TLS* elegir **Full (strict)**.
 
+## API de contenido (publicar artículos con el MCP)
+
+Opcional. Activa `/api/v1`, que usa el MCP de `mcp/` para subir artículos sin entrar al panel:
+
+```bash
+openssl rand -hex 32                 # copiar el resultado
+nano ~/thesparkindex/deploy/.env     # CONTENT_API_TOKEN="<token>"
+./deploy/deploy.sh
+```
+
+Configuración del MCP en tu computadora: ver `mcp/README.md`.
+
 ## Actualizar el sitio
 
 ```bash
