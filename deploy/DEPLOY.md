@@ -95,6 +95,18 @@ nano ~/thesparkindex/deploy/.env     # CONTENT_API_TOKEN="<token>"
 
 Configuración del MCP en tu computadora: ver `mcp/README.md`.
 
+### MCP remoto (conector de claude.ai)
+
+Para usar la revista desde claude.ai (web, escritorio o móvil) sin instalar nada:
+
+```bash
+openssl rand -hex 24                 # copiar el resultado
+nano ~/thesparkindex/deploy/.env     # MCP_URL_SECRET="<secreto>"
+./deploy/deploy.sh
+```
+
+URL del conector: `https://<dominio>/api/mcp/<secreto>`. Ver `mcp/README.md`.
+
 ## Actualizar el sitio
 
 ```bash

@@ -1,5 +1,38 @@
 # MCP de KEY — The Spark Index
 
+Hay dos formas de conectar Claude a la revista:
+
+| | **Remoto** (recomendado para el equipo) | **Local** (esta carpeta) |
+|---|---|---|
+| Dónde corre | En el servidor: `https://<dominio>/api/mcp/<secreto>` | En tu computadora (`node server.mjs`) |
+| Desde dónde se usa | claude.ai web, escritorio y móvil, cualquier cuenta | Claude Code / Claude Desktop en esa computadora |
+| Imágenes | Por URL pública (se descargan al sitio) | Archivos locales |
+| Publicar carpetas `.md` | No | Sí (`spark_publish_file`) |
+
+## MCP remoto (conector de claude.ai)
+
+1. En el servidor, define `MCP_URL_SECRET` en `deploy/.env` (`openssl rand -hex 24`) y ejecuta `./deploy/deploy.sh`.
+2. En claude.ai: **Configuración → Conectores → Agregar conector personalizado**.
+   - Nombre: `The Spark Index`
+   - URL: `https://thesparkindex.canariostudios.com/api/mcp/<MCP_URL_SECRET>`
+   - Deja vacíos los campos de OAuth.
+3. En un chat, activa el conector (botón de herramientas) y pide, por ejemplo:
+   *"Publica este artículo en Noticias, autora Fabiola Guardado, portada: https://…/foto.jpg"*.
+
+Herramientas: `spark_list_sections`, `spark_list_authors`, `spark_list_articles`, `spark_get_article`
+(devuelve el cuerpo en Markdown para editarlo), `spark_save_article`, `spark_save_author`,
+`spark_upload_image` (desde URL).
+
+**La URL completa es la contraseña**: quien la tenga puede publicar. Compártela solo con el equipo
+editorial. Si se filtra, cambia `MCP_URL_SECRET`, vuelve a desplegar y actualiza el conector.
+En planes Team/Enterprise de Claude, un administrador debe agregar el conector para la organización.
+
+Las imágenes deben ser enlaces **directos** y públicos (que abran solo la imagen). Los enlaces de
+"compartir" de Google Drive o WhatsApp no sirven; en ese caso sube la foto desde el panel
+(`/admin/media`) y pásale a Claude la URL que aparece ahí.
+
+## MCP local
+
 Servidor MCP local para publicar artículos en la revista desde Claude (Claude Code, Claude Desktop
 o cualquier cliente MCP). Usa la API de contenido del sitio (`/api/v1`), protegida con un token.
 
